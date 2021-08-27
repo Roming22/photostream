@@ -1,0 +1,12 @@
+- Fix test_topic.py
+- Dark background
+- Make image fullscreen
+- Auto-refresh
+- Invalidate image cache every 5 minutes
+- Pause slideshow with space
+- Next slide with -> arrow or Enter
+- Add image:
+	- via URL
+	- via drag-n-drop
+- Delete image via icon
+- Fade in-out icon when the mouse moves/stops

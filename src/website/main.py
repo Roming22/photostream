@@ -15,10 +15,11 @@ APP = Flask(__name__)
 LOGGER = create_logger(APP)
 
 
-@APP.route("/")
-def index() -> str:  # pylint: disable=inconsistent-return-statements
+@APP.route("/<topic>")
+def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     """Website homepage"""
-    return render("index.html")
+    request_data = {"topic": topic}
+    return render("index.html", request_data)
 
 
 @APP.route("/alive")
@@ -29,10 +30,10 @@ def alive() -> Mapping:
     return {}
 
 
-def render(url: str) -> str:
+def render(url: str, request_data: Mapping) -> str:
     """Generic function to render a page"""
     try:
-        response = render_page(url)
+        response = render_page(url, request_data)
     except Exception as ex:  # pylint: disable=broad-except
         message = f"Unexpected Exception: {ex}"
         LOGGER.info("".join(format_exception(*sys.exc_info())))

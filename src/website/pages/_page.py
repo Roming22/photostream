@@ -20,13 +20,13 @@ class Page(ABC):
         cls._URL_MAPPING[url] = cls
 
     @classmethod
-    def render(cls, url: str):
+    def render(cls, url: str, request_data: Mapping) -> str:
         """Render a single page from a template and a context object"""
         page = cls._URL_MAPPING[url]
-        response = render_template(url, **(page.get_context()))
+        response = render_template(url, **(page.get_context(request_data)))
         return response
 
     @classmethod
     @abstractmethod
-    def get_context(cls) -> Mapping:
+    def get_context(cls, request_data: Mapping) -> Mapping:
         """Return the dictionary with the data used to populate the template"""
