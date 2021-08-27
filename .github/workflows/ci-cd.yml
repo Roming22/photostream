@@ -1,0 +1,63 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - dev
+      - release/*
+  pull_request:
+    branches:
+      - dev
+      - release/*
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install packages
+        run: |
+          date
+          make install
+      - name: Run tests
+        run: |
+          date
+          make test
+          date
+  CI-CD:
+    needs: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install packages
+        run: |
+          date
+          make install
+      - name: Run tests
+        run: |
+          date
+          make test
+          date
+      - name: Build package
+        run: |
+          date
+          make package
+      - name: Upload package
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+          POETRY_PYPI_TOKEN_TESTPYPI: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: |
+          date
+          make upload
+          date

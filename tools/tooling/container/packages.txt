@@ -1,0 +1,7 @@
+diffutils
+enchant
+findutils
+git
+make
+procps
+vim

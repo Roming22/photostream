@@ -1,0 +1,11 @@
+Python 3.8
+Name                            Stmts   Miss  Cover
+---------------------------------------------------
+src/website/__init__.py             1      0   100%
+src/website/__version__.py          4      1    75%
+src/website/main.py                23      6    74%
+src/website/pages/__init__.py       4      0   100%
+src/website/pages/_page.py         18      1    94%
+src/website/pages/index.py         12      0   100%
+---------------------------------------------------
+TOTAL                              62      8    87%
