@@ -26,10 +26,11 @@ def cli(dev: bool, verbose: bool) -> None:
     The environment is different in local test vs prod, mostly because of the webserver
     used to serve the application.
     """
+    cmd_env = {}
     if dev:
         # Do not use those settings in production.
-        os.environ["FLASK_DEBUG"] = "1"
-        os.environ["FLASK_ENV"] = "development"
+        cmd_env["FLASK_DEBUG"] = "1"
+        cmd_env["FLASK_ENV"] = "development"
         cmd = ["flask", "run", "--host=0.0.0.0"]
     else:
         # Waitress seems to be the simplest solution
@@ -40,11 +41,13 @@ def cli(dev: bool, verbose: bool) -> None:
     else:
         log = lambda _: None
 
-    website_dir = Path(__file__).absolute().parent.parent / "src/website"
+    website_dir = Path(__file__).absolute().parent.parent / "website"
     os.chdir(website_dir)
     os.environ["FLASK_APP"] = "main"
-    log(f"Command: cd {Path.cwd().absolute()}; {' '.join(cmd)};")
-    os.execvp(cmd[0], cmd)
+    log(
+        f"Command: cd {Path.cwd().absolute()}; {' '.join([f'{k}={v}' for k,v in cmd_env.items()]+cmd)};"
+    )
+    os.execvpe(cmd[0], cmd, {k: v for k, v in os.environ.items()} | cmd_env)
 
 
 if __name__ == "__main__":

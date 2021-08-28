@@ -9,6 +9,9 @@ install: poetry.lock
 	poetry install
 	make test_src || true
 
+run_server:
+	src/bin/server.py -d -v
+
 test: test_src test_qa
 
 test_src:
