@@ -45,3 +45,4 @@ class Image:
         cls._cache[topic] = []
         for filepath in (cls._SERVER_DIR / cls._IMAGE_DIR / topic).iterdir():
             cls._cache[topic].append(filepath.relative_to(cls._SERVER_DIR))
+        cls._cache[topic].sort()
