@@ -20,7 +20,7 @@ class Image:
     """Singleton to access images"""
 
     _SERVER_DIR = Path(__file__).parent.parent
-    _IMAGE_DIR = "static/img"
+    _IMAGE_DIR = "static/img/topic"
     _cache: MutableMapping = {}
 
     @classmethod

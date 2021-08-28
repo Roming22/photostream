@@ -23,8 +23,8 @@ def test_page(monkeypatch: MonkeyPatch, client: FlaskClient) -> None:
     assert mock_choice.call_count == 1
     call_args = {str(arg) for arg in mock_choice.call_args_list[0].args[0]}
     assert call_args == {
-        "static/img/unittest/photo1.jpg",
-        "static/img/unittest/photo2.jpg",
-        "static/img/unittest/photo3.jpg",
-        "static/img/unittest/photo4.jpg",
+        "static/img/topic/unittest/photo1.jpg",
+        "static/img/topic/unittest/photo2.jpg",
+        "static/img/topic/unittest/photo3.jpg",
+        "static/img/topic/unittest/photo4.jpg",
     }

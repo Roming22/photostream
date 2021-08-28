@@ -1,6 +1,4 @@
-- Dark background
 - Make image fullscreen
-- Auto-refresh
 - Invalidate image cache every 5 minutes
 - Pause slideshow with space
 - Next slide with -> arrow or Enter
