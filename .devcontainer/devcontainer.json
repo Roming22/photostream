@@ -6,6 +6,9 @@
         "dockerfile": "../tools/tooling/container/Dockerfile",
         "context": ".."
     },
+    "forwardPorts": [
+        5000
+    ],
     "postCreateCommand": "make install",
     "containerEnv": {
         "IDE": "VSCODE",
