@@ -25,7 +25,6 @@ parse_args(){
 }
 
 run_pylint(){
-    set -x
     DIR="src"
     find "${PROJECT_DIR}/${DIR}" -maxdepth 1 -mindepth 1 -type d -not -name \*.egg-info | while read -r SUBDIR; do
         echo "=> pylint ${PROJECT_DIR}/${DIR}"
