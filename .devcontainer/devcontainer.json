@@ -4,12 +4,13 @@
     "name": "Python",
     "build": {
         "dockerfile": "../tools/tooling/container/Dockerfile",
-        "context": ".."
+        "context": "..",
+        "target": "dev"
     },
     "forwardPorts": [
         5000
     ],
-    "postCreateCommand": "make install",
+    "postCreateCommand": "make vscode",
     "containerEnv": {
         "IDE": "VSCODE",
     },

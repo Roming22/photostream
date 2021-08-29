@@ -1,16 +1,21 @@
+app: environment
+	rm Makefile poetry.lock poetry.toml
+
+build:
+	"tools/releasing/build.sh"
+
 coverage:
 	poetry run tools/qa/coverage/update.sh
+
+environment: poetry.lock
+	command -v poetry || pip install --user poetry
+	poetry install
 
 format:
 	poetry run tools/qa/format.sh
 
-install: poetry.lock
-	command -v poetry || pip install poetry
-	poetry install
-	make test_src || true
-
 run_server:
-	src/bin/server.py -d -v
+	"src/bin/server.py" -d -v
 
 test: test_src test_qa
 
@@ -23,8 +28,8 @@ test_src:
 test_qa:
 	poetry run pytest --numprocesses=auto "tests/qa"
 
-package:
-	"tools/releasing/package.sh"
-
 upload:
 	"tools/releasing/upload.sh"
+
+vscode: environment
+	make test_src || true
