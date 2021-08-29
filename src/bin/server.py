@@ -23,7 +23,7 @@ import click
 def cli(dev: bool, verbose: bool) -> None:
     """Start the server
 
-    The environment is different in local test vs prod, mostly because of the webserver
+    The environment is different in local test vs prod, mostly because of the web server
     used to serve the application.
     """
     cmd_env = {}
@@ -37,9 +37,11 @@ def cli(dev: bool, verbose: bool) -> None:
         # c.f. https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-waitress-and-nginx-2020-235c
         raise Exception("[ERROR] Use a proper webserver")
     if verbose:
-        log = lambda message: print(message)
+        log = print
     else:
-        log = lambda _: None
+
+        def log(*_, **__):
+            pass
 
     website_dir = Path(__file__).absolute().parent.parent / "website"
     os.chdir(website_dir)
@@ -47,7 +49,7 @@ def cli(dev: bool, verbose: bool) -> None:
     log(
         f"Command: cd {Path.cwd().absolute()}; {' '.join([f'{k}={v}' for k,v in cmd_env.items()]+cmd)};"
     )
-    os.execvpe(cmd[0], cmd, {k: v for k, v in os.environ.items()} | cmd_env)
+    os.execvpe(cmd[0], cmd, dict(os.environ.items()) | cmd_env)
 
 
 if __name__ == "__main__":
