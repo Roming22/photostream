@@ -3,6 +3,4 @@
 	- via drag-n-drop
 - Delete image via icon
 - Update image cache on add/delete
-- Pause slideshow with space
-- Next slide with -> arrow or Enter
 - Fade in-out icons when the mouse moves/stops
