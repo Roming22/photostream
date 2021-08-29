@@ -3,7 +3,6 @@ authors = ["Your Name <user@example.com>"]
 description = ""
 name = "website"
 packages = [{include = "website", from = "src"}]
-readme = "README.md"
 version = "0.0.dev0"
 
 [tool.poetry.dependencies]
