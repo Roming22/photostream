@@ -13,25 +13,22 @@ on:
 jobs:
   CI:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python: [3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python }}
-      - name: Install packages
+          python-version: "3.9"
+      - name: Install environment
         run: |
           date
-          make install
+          make environment
       - name: Run tests
         run: |
           date
           make test
           date
-  CI-CD:
+  CD:
     needs: CI
     runs-on: ubuntu-latest
     steps:
@@ -39,24 +36,18 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
-      - name: Install packages
-        run: |
-          date
-          make install
-      - name: Run tests
-        run: |
-          date
-          make test
-          date
-      - name: Build package
-        run: |
-          date
-          make package
-      - name: Upload package
+          python-version: "3.9"
+      - name: Build image
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
-          POETRY_PYPI_TOKEN_TESTPYPI: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          IMAGE_REPOSITORY_USER: ${{ secrets.IMAGE_REPOSITORY_USER }}
+        run: |
+          date
+          make build
+      - name: Upload image
+        env:
+          IMAGE_REPOSITORY_TOKEN: ${{ secrets.IMAGE_REPOSITORY_TOKEN }}
+          IMAGE_REPOSITORY_URL: ${{ secrets.IMAGE_REPOSITORY_URL }}
+          IMAGE_REPOSITORY_USER: ${{ secrets.IMAGE_REPOSITORY_USER }}
         run: |
           date
           make upload

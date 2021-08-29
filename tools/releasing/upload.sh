@@ -1,22 +1,26 @@
 #!/bin/bash -e
 #
-# Deliver the Python package by uploading it to the package server
+# Deliver the image by uploading it to the image repository
 #
 set -o pipefail
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
 VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
+IMAGE="${IMAGE_REPOSITORY_USER}/photostream/${VERSION}"
+echo "Uploading: ${IMAGE}"
 
-echo "Uploading: ${VERSION}"
-
-# Make sure that the tokens have been defined
-[[ -n "${POETRY_PYPI_TOKEN_PYPI}" ]] || { \
-    echo "[ERROR] POETRY_PYPI_TOKEN_PYPI is not set"; \
+# Make sure that the credentials have been defined
+[[ -n "${IMAGE_REPOSITORY_TOKEN}" ]] || { \
+    echo "[ERROR] IMAGE_REPOSITORY_TOKEN is not set"; \
     exit 1; \
 }
-[[ -n "${POETRY_PYPI_TOKEN_TESTPYPI}" ]] || { \
-    echo "[ERROR] POETRY_PYPI_TOKEN_TESTPYPI is not set"; \
-    exit 1; 
+[[ -n "${IMAGE_REPOSITORY_URL}" ]] || { \
+    echo "[ERROR] IMAGE_REPOSITORY_URL is not set"; \
+    exit 1; \
+}
+[[ -n "${IMAGE_REPOSITORY_USER}" ]] || { \
+    echo "[ERROR] IMAGE_REPOSITORY_USER is not set"; \
+    exit 1; \
 }
 
 # Do not tag anything that does not come from a release branch or the dev branch
@@ -27,13 +31,9 @@ if [[ "${GITHUB_REF}" = refs/heads/release/* || "${GITHUB_REF}" = "refs/heads/de
     git push --follow-tags
 fi
 
-# Upload anything to test.pypi.org
-echo; echo "Uploading to test.pypi"
-poetry config repositories.testpypi "https://test.pypi.org/simple"
-poetry publish -v --repository testpypi
-
-# Upload to pypi.org only when it comes from a release branch
+# Upload image only when it comes from a release branch
 if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push" ]]; then
-    echo "Uploading to pypi"
-    poetry publish
+    echo "Uploading to ${IMAGE_REPOSITORY_URL}"
+    docker login --password "${IMAGE_REPOSITORY_TOKEN}" --username "${IMAGE_REPOSITORY_USER}" "${IMAGE_REPOSITORY_URL}"
+    docker push "${IMAGE}"
 fi
