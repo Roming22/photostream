@@ -1,6 +1,5 @@
-- Add image:
+- Delete image via icon
+- Add image (update image cache):
 	- via URL
 	- via drag-n-drop
-- Delete image via icon
-- Update image cache on add/delete
 - Fade in-out icons when the mouse moves/stops

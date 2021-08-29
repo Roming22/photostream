@@ -11,16 +11,20 @@
   <link rel="stylesheet" href="/static/styles/image.css">
 
   <!-- JavaScript -->
+  <script>
+    topic = "{{ topic }}"
+    image = null
+  </script>
   <script src="/static/js/autorefresh.js"></script>
   <script src="/static/js/keyboard.js"></script>
 
   <link rel="shortcut icon" type="image/jpg" href="/static/img/favicon.ico" />
-  <title>PhotoStream</title>
+  <title>PhotoStream - {{ topic }}</title>
 </head>
 
-<body onload="JavaScript:AutoRefresh(5000)">
+<body>
   <div class="flex-container">
-    <img src="./{{ image }}" alt="{{ image }}" />
+    <img id="image" src="" alt="" />
   </div>
 </body>
 

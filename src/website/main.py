@@ -4,9 +4,9 @@ Should contain nothing but routing information
 """
 import sys
 from traceback import format_exception
-from typing import Mapping
+from typing import Any, Mapping, MutableMapping
 
-from flask import Flask, abort
+from flask import Flask, abort, request
 from flask.logging import create_logger
 
 from website.pages import render as render_page
@@ -20,6 +20,19 @@ def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     """Website homepage"""
     request_data = {"topic": topic}
     return render("index.html", request_data)
+
+
+@APP.route("/<topic>/<name>", methods=["GET", "DELETE"])
+def filename(
+    topic: str, name: str
+) -> str:  # pylint: disable=inconsistent-return-statements
+    """Get image URL"""
+    request_data: MutableMapping[str, Any] = {
+        "topic": topic,
+        "filename": name,
+        "http_method": request.method,
+    }
+    return render("filename.json", request_data)
 
 
 @APP.route("/alive")
