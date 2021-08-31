@@ -12,7 +12,10 @@ RUN groupadd -g 9999 user \
     && useradd --create-home --gid user --shell /bin/bash --system --uid 9999 user \
     && rm /home/user/.profile \
     && apt-get update \
-    && for PACKAGE in `cat /opt/container/packages.txt`; do apt-get install -y "${PACKAGE}"; done \
+    && for PACKAGE in `cat /opt/container/packages.txt`; do {\
+        apt-get install -y "${PACKAGE}" \
+        || { echo "Cannot install $PACKAGE"; exit 1; }; \
+    }; done \
     && apt-get clean \
     && rm -rf /opt/container \
     && mkdir /opt/app \
@@ -38,7 +41,10 @@ FROM builder AS dev
 COPY tools/tooling/container/dev /opt/container
 USER root
 RUN apt-get update \
-    && for PACKAGE in `cat /opt/container/packages.txt`; do apt-get install -y "${PACKAGE}"; done \
+    && for PACKAGE in `cat /opt/container/packages.txt`; do {\
+        apt-get install -y "${PACKAGE}" \
+        || { echo "Cannot install $PACKAGE"; exit 1; }; \
+    }; done \
     && apt-get clean \
     && rm -rf /opt/container
 USER user
