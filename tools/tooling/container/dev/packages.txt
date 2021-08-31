@@ -1,5 +1,5 @@
 diffutils
-enchant
+enchant-2
 findutils
 git
 make
