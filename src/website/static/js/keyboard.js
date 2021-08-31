@@ -1,13 +1,18 @@
-window.addEventListener('keydown', (event) => {
-    // alert(`Key pressed ${event.key}`);
-    if (event.key === "ArrowRight" || event.key === "Enter") {
-        reload()
-    } else if (event.key === "Delete") {
-        deleteImage()
-    } else if (event.key === "Space") {
-        pause_play()
-    }
-}, true);
+window.addEventListener(
+    'keydown',
+    (event) => {
+        console.log(`Key pressed ${event.code}/${event.key}/${event.value}`);
+        keyCode = event.code
+        if (keyCode === "ArrowRight" || keyCode === "Enter") {
+            loadImage()
+        } else if (keyCode === "Delete") {
+            deleteImage()
+        } else if (keyCode === "KeyP" || keyCode === "Space") {
+            pause_play()
+        }
+    },
+    true
+);
 
 function deleteImage() {
     if (confirm(`Delete ${image.filepath} from ${topic}`)) {
@@ -22,13 +27,14 @@ function deleteImage() {
 
 function pause_play() {
     if (slideTimeout === false) {
-        reload()
+        console.log("Resume the slideshow")
+        slideTimeout = setTimeout(
+            loadImage,
+            150
+        )
     } else {
+        console.log("Pause the slideshow")
         clearTimeout(slideTimeout)
         slideTimeout = false
     }
-}
-
-function reload() {
-    location.reload();
 }

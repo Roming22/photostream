@@ -1,17 +1,6 @@
 refreshInterval = 5
 refreshCount = 0
-setInterval(
-    function () {
-        refreshCount += 1
-        if (refreshCount < 42) {
-            loadImage()
-        } else {
-            console.log("Reload page")
-            location.reload()
-        }
-    },
-    refreshInterval * 1000
-);
+slideTimeout = null
 
 function loadImage() {
     console.log("Load image")
@@ -20,6 +9,22 @@ function loadImage() {
     ).then(
         data => updateImage(data)
     )
+    if (refreshCount < 42) {
+        refreshCount += 1
+        callback = loadImage
+    } else {
+        callback = reloadPage
+    }
+
+    slideTimeout = setTimeout(
+        callback,
+        refreshInterval * 1000
+    )
+}
+
+function reloadPage() {
+    console.log("Reload page")
+    location.reload()
 }
 
 function updateImage(data) {
