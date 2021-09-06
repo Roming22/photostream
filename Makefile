@@ -15,7 +15,7 @@ format:
 	poetry run tools/qa/format.sh
 
 run_server:
-	"src/bin/server.py" -d -v
+	poetry run "src/bin/server.py" -d -v
 
 test: test_src test_qa
 
