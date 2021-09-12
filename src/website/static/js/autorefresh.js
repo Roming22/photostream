@@ -9,22 +9,10 @@ function loadImage() {
     ).then(
         data => updateImage(data)
     )
-    if (refreshCount < 42) {
-        refreshCount += 1
-        callback = loadImage
-    } else {
-        callback = reloadPage
-    }
-
     slideTimeout = setTimeout(
-        callback,
+        loadImage,
         refreshInterval * 1000
     )
-}
-
-function reloadPage() {
-    console.log("Reload page")
-    location.reload()
 }
 
 function updateImage(data) {
