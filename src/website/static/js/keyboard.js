@@ -5,6 +5,18 @@ window.addEventListener(
         keyCode = event.code
         if (keyCode === "ArrowRight" || keyCode === "Enter") {
             loadImage()
+        } else if (keyCode === "ArrowDown" || event.key === "-") {
+            refreshInterval -= 1
+            if (refreshInterval < 1) {
+                refreshInterval = 1
+            }
+        } else if (keyCode === "ArrowUp" || event.key === "+") {
+            refreshInterval += 1
+            if (refreshInterval > 60) {
+                refreshInterval = 60
+            }
+        } else if (keyCode === "ArrowRight" || keyCode === "Enter") {
+            loadImage()
         } else if (keyCode === "Delete") {
             deleteImage()
         } else if (keyCode === "KeyP" || keyCode === "Space") {
