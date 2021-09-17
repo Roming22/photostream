@@ -15,7 +15,7 @@ format:
 	poetry run tools/qa/format.sh
 
 run_server:
-	poetry run "src/bin/server.py" -d -v
+	"src/bin/server" -d
 
 test: test_src test_qa
 
@@ -33,6 +33,7 @@ upload:
 
 vscode: environment
 	make test_src || true
+
 
 .PHONY: help
 help:
