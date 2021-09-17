@@ -32,7 +32,7 @@ WORKDIR /opt/app
 RUN sed -i -e 's:"src":".":' pyproject.toml \
     && make app
 
-CMD ["poetry" , "run", "bin/server.py", "-d", "-v"]
+CMD ["bin/server"]
 
 
 ################################################################################
