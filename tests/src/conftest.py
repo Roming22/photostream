@@ -4,7 +4,7 @@ from typing import Callable, Generator, List
 import pytest
 from flask.testing import FlaskClient
 
-from website.main import APP
+from website.routing import APP
 
 
 @pytest.fixture
