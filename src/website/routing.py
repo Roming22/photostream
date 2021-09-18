@@ -20,7 +20,7 @@ LOGGER = create_logger(APP)
 def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     """Website homepage"""
     request_data = {"topic": topic}
-    return render("index.html", request_data)
+    return render("topic.html", request_data)
 
 
 @APP.route("/<topic>/<name>", methods=["GET", "DELETE"])
@@ -36,12 +36,10 @@ def filename(
     return render("filename.json", request_data)
 
 
-@APP.route("/alive")
-def alive() -> Mapping:
-    """Service entry-point
-
-    Used by OCP to check that the service is started"""
-    return {}
+@APP.route("/")
+def root() -> str:
+    """Service entry-point"""
+    return render("index.html", {})
 
 
 def render(url: str, request_data: Mapping) -> str:

@@ -3,6 +3,7 @@ from typing import Mapping
 
 import website.pages.filename
 import website.pages.index
+import website.pages.topic
 from website.pages._page import Page
 
 
