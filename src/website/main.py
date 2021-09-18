@@ -10,6 +10,7 @@ from functools import partial
 import click
 from waitress import serve
 
+from website.__version__ import __commit__, __version__
 from website.routing import APP
 
 
@@ -26,6 +27,7 @@ def cli(dev: bool) -> None:
     The environment is different in local test vs prod, mostly because of the web server
     used to serve the application.
     """
+    print(f"photostream {__version__} ({__commit__})")
     os.environ["FLASK_APP"] = "main"
 
     if dev:
