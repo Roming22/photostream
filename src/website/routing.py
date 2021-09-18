@@ -3,12 +3,14 @@
 
 Should contain nothing but routing information
 """
+import os
 import sys
 from traceback import format_exception
 from typing import Any, Mapping, MutableMapping
 
 from flask import Flask, abort, request
 from flask.logging import create_logger
+from markupsafe import escape
 
 from website.pages import render as render_page
 
@@ -19,7 +21,7 @@ LOGGER = create_logger(APP)
 @APP.route("/<topic>")
 def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     """Website homepage"""
-    request_data = {"topic": topic}
+    request_data = {"topic": escape(topic)}
     return render("topic.html", request_data)
 
 
@@ -29,8 +31,8 @@ def filename(
 ) -> str:  # pylint: disable=inconsistent-return-statements
     """Get image URL"""
     request_data: MutableMapping[str, Any] = {
-        "topic": topic,
-        "filename": name,
+        "topic": escape(topic),
+        "filename": escape(name),
         "http_method": request.method,
     }
     return render("filename.json", request_data)
@@ -44,8 +46,12 @@ def root() -> str:
 
 def render(url: str, request_data: Mapping) -> str:
     """Generic function to render a page"""
+    context = {"url_prefix": ""}
+    if "KUBERNETES_PORT" in os.environ.keys():
+        service = request.host.split(":")[0]
+        context["url_prefix"] = f"/{service}"
     try:
-        response = render_page(url, request_data)
+        response = render_page(url, request_data, context)
     except Exception as ex:  # pylint: disable=broad-except
         message = f"Unexpected Exception: {ex}"
         LOGGER.info("".join(format_exception(*sys.exc_info())))

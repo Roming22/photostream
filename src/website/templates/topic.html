@@ -7,18 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/static/styles/body.css">
-  <link rel="stylesheet" href="/static/styles/image.css">
+  <link rel="stylesheet" href="{{ url_prefix }}/static/styles/body.css">
+  <link rel="stylesheet" href="{{ url_prefix }}/static/styles/image.css">
 
   <!-- JavaScript -->
   <script>
-    topic = "{{ topic }}"
     image = null
+    topic = "{{ topic }}"
+    url_prefix = "{{ url_prefix }}"
   </script>
-  <script src="/static/js/autorefresh.js"></script>
-  <script src="/static/js/keyboard.js"></script>
+  <script src="{{ url_prefix }}/static/js/autorefresh.js"></script>
+  <script src="{{ url_prefix }}/static/js/keyboard.js"></script>
 
-  <link rel="shortcut icon" type="image/jpg" href="/static/img/favicon.ico" />
+  <link rel="shortcut icon" type="image/jpg" href="{{ url_prefix }}/static/img/favicon.ico" />
   <title>PhotoStream - {{ topic }}</title>
 </head>
 
