@@ -4,7 +4,7 @@ slideTimeout = null
 
 function loadImage() {
     console.log("Load image")
-    fetch(`/${topic}/random`).then(
+    fetch(`${url_prefix}/${topic}/random`).then(
         response => response.json()
     ).then(
         data => updateImage(data)

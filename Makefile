@@ -9,13 +9,13 @@ coverage:
 
 environment: poetry.lock
 	command -v poetry || pip install --user poetry
-	poetry install
+	poetry install --no-interaction --no-ansi
 
 format:
 	poetry run tools/qa/format.sh
 
 run_server:
-	"src/bin/server" -d
+	"src/bin/server.sh" -d
 
 test: test_src test_qa
 

@@ -14,17 +14,19 @@ class Filename(Page, url="filename.json"):
     """Context generator"""
 
     @classmethod
-    def get_context(cls, request_data: Mapping) -> Mapping:
+    def get_context(cls, request_data: Mapping, context: MutableMapping) -> Mapping:
         """Return the dictionary with the data used to populate the template"""
         if request_data["http_method"] == "GET":
-            data = cls.get_image(request_data["filename"], request_data["topic"])
+            data = cls.get_image(
+                request_data["filename"], request_data["topic"], context["url_prefix"]
+            )
         elif request_data["http_method"] == "DELETE":
             data = cls.delete_image(request_data["filename"], request_data["topic"])
-        context = {"data": dumps(data)}
+        context["data"] = dumps(data)
         return context
 
     @classmethod
-    def get_image(cls, filename: str, topic: str) -> Mapping:
+    def get_image(cls, filename: str, topic: str, url_prefix: str) -> Mapping:
         """Return the path to an image
 
         :param filename: If set to "random" a random file from the topic is returned.
@@ -40,7 +42,7 @@ class Filename(Page, url="filename.json"):
             "filename": filepath.name,
             "filepath": f"{filepath.relative_to(SERVER_DIR)}",
             "topic": topic,
-            "url": f"/{filepath.relative_to(SERVER_DIR)}",
+            "url": f"{url_prefix}/{filepath.relative_to(SERVER_DIR)}",
         }
         return data
 

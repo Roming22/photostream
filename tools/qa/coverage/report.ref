@@ -9,7 +9,7 @@ src/website/pages/_page.py               18      1    94%
 src/website/pages/filename.py            47      6    87%
 src/website/pages/index.py                6      1    83%
 src/website/pages/topic.py                7      0   100%
-src/website/routing.py                   29      6    79%
+src/website/routing.py                   35      8    77%
 src/website/templates/filename.json       1      0   100%
 ---------------------------------------------------------
-TOTAL                                   140     35    75%
+TOTAL                                   146     37    75%
