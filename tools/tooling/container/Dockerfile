@@ -24,6 +24,7 @@ USER user
 ENV PATH="/home/user/.local/bin:/usr/local/bin:/usr/bin:/bin"
 
 
+
 ################################################################################
 FROM builder AS release
 
@@ -32,8 +33,9 @@ WORKDIR /opt/app
 RUN sed -i -e 's:"src":".":' pyproject.toml \
     && make app
 
-CMD ["bin/server"]
-
+CMD ["bin/server.sh"]
+HEALTHCHECK --start-period=10s --interval=30s --timeout=5s --retries=3 \
+    CMD healthcheck.sh || exit 1
 
 ################################################################################
 FROM builder AS dev
