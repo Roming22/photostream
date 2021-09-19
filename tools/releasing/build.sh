@@ -19,7 +19,8 @@ docker build --file "${DOCKERFILE}" --tag "${TAG}" --target "${TARGET}" "${PROJE
 
 if [[ -n "${IMAGE_REPOSITORY_USER}" ]]; then
     docker tag "${TAG}" "${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
-    echo "Tag: ${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
+    echo "${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
 else
-    echo "[WARNING] IMAGE_REPOSITORY_USER is not set, image can't be pushed without being retagged"; \
+    echo "[WARNING] IMAGE_REPOSITORY_USER is not set, image can't be pushed without being retagged";
+    echo "$TAG"
 fi

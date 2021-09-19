@@ -1,5 +1,10 @@
+- Properly resize images (img.naturalHeight, div.height?)
 - Delete image via icon
 - Add image (update image cache):
 	- via URL
 	- via drag-n-drop
 - Fade in-out icons when the mouse moves/stops
+- Make the app work when proxied
+- Warmup the server so the image boots faster
+- Speed up docker image creation
+- Multi-arch builds
