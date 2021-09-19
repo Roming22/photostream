@@ -1,4 +1,6 @@
-app: environment
+app:
+	sed -i -e 's:"src":".":' pyproject.toml
+	make environment
 	rm Makefile poetry.lock poetry.toml
 
 build:

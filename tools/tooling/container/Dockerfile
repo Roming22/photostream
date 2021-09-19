@@ -1,5 +1,5 @@
 # TODO: Freeze version and automate versions update
-FROM python:3.9-slim AS builder
+FROM docker.io/python:3.9 AS builder
 
 # Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,9 +10,9 @@ ENV DEBIAN_FRONTEND noninteractive
 COPY tools/tooling/container/builder /opt/container
 RUN groupadd -g 9999 user \
     && useradd --create-home --gid user --shell /bin/bash --system --uid 9999 user \
-    && rm /home/user/.profile \
     && apt-get update \
     && for PACKAGE in `cat /opt/container/packages.txt`; do {\
+        echo "Installing $PACKAGE"; \
         apt-get install -y "${PACKAGE}" \
         || { echo "Cannot install $PACKAGE"; exit 1; }; \
     }; done \
@@ -28,10 +28,10 @@ ENV PATH="/home/user/.local/bin:/usr/local/bin:/usr/bin:/bin"
 ################################################################################
 FROM builder AS release
 
-COPY --chown=user:user Makefile poetry.lock poetry.toml pyproject.toml src/ /opt/app/
 WORKDIR /opt/app
-RUN sed -i -e 's:"src":".":' pyproject.toml \
-    && make app
+
+COPY --chown=user:user Makefile poetry.lock poetry.toml pyproject.toml src/ /opt/app/
+RUN make app
 
 CMD ["bin/server.sh"]
 HEALTHCHECK --start-period=10s --interval=30s --timeout=5s --retries=3 \
