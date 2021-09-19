@@ -15,7 +15,8 @@ echo "Release: ${VERSION}"
 DOCKERFILE="${PROJECT_DIR}/tools/tooling/container/Dockerfile"
 TAG="photostream:latest"
 TARGET="release"
-docker build --file "${DOCKERFILE}" --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
+PLATFORM="linux/amd64,linux/arm64"
+docker buildx build --file "${DOCKERFILE}" --platform "$PLATFORM" --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
 
 if [[ -n "${IMAGE_REPOSITORY_USER}" ]]; then
     docker tag "${TAG}" "${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
