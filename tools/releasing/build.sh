@@ -6,9 +6,16 @@ set -o pipefail
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
 
-# Generate a new version
-python tools/releasing/version.py
-VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
+if [[ -n "$1" ]]; then
+    VERSION="$1"
+    IMAGE_REPOSITORY_USER="k3d-registry.localhost:5000/skwr/web"
+else
+    # Generate a new version
+    python tools/releasing/version.py
+    VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
+fi
+
+
 
 # Build the image
 echo "Release: ${VERSION}"
