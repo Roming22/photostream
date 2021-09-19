@@ -7,9 +7,12 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
 
 # Generate a new version
-python tools/releasing/version.py
-VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
-
+if [[ -n "${IMAGE_REPOSITORY_USER}" ]]; then
+    python tools/releasing/version.py
+    VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
+else
+    VERSION="latest"
+fi
 # Build the image
 echo "Release: ${VERSION}"
 DOCKERFILE="${PROJECT_DIR}/tools/tooling/container/Dockerfile"

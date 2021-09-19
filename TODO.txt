@@ -5,5 +5,4 @@
 - Fade in-out icons when the mouse moves/stops
 - Make the app work when proxied
 - Warmup the server so the image boots faster
-- Speed up docker image creation
 - Multi-arch builds

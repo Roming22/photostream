@@ -28,10 +28,18 @@ ENV PATH="/home/user/.local/bin:/usr/local/bin:/usr/bin:/bin"
 ################################################################################
 FROM builder AS release
 
-COPY --chown=user:user Makefile poetry.lock poetry.toml pyproject.toml src/ /opt/app/
+
 WORKDIR /opt/app
-RUN sed -i -e 's:"src":".":' pyproject.toml \
-    && make app
+
+# Split poetry setup from website data to speed up builds
+COPY --chown=user:user Makefile poetry.lock poetry.toml pyproject.toml /opt/app/
+RUN mkdir website \
+    && touch website/__init__.py \
+    && sed -i -e 's:from = "src":from = ".":' pyproject.toml \
+    && make app \
+    && rm -rf website
+
+COPY --chown=user:user src/ /opt/app/
 
 CMD ["bin/server.sh"]
 HEALTHCHECK --start-period=10s --interval=30s --timeout=5s --retries=3 \
