@@ -1,4 +1,3 @@
-- Properly resize images (img.naturalHeight, div.height?)
 - Delete image via icon
 - Add image (update image cache):
 	- via URL
