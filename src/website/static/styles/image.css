@@ -8,21 +8,3 @@
   justify-content:center;
   align-items:center;
 }
-
-img {
-  max-width:100%;
-  max-height:100%;
-}
-
-@media (orientation: portrait) {
-  img {
-    height:auto;
-    width:100%;
-  }
-}
-@media (orientation: landscape) {
-  img {
-    height:100%;
-    width:auto;
-  }
-}
