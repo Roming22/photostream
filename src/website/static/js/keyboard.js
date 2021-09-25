@@ -6,21 +6,15 @@ window.addEventListener(
         if (keyCode === "ArrowRight" || keyCode === "Enter") {
             loadImage()
         } else if (keyCode === "ArrowDown" || event.key === "-") {
-            refreshInterval -= 1
-            if (refreshInterval < 1) {
-                refreshInterval = 1
-            }
+            imageTimer.shift(-1000)
         } else if (keyCode === "ArrowUp" || event.key === "+") {
-            refreshInterval += 1
-            if (refreshInterval > 60) {
-                refreshInterval = 60
-            }
+            imageTimer.shift(1000)
         } else if (keyCode === "ArrowRight" || keyCode === "Enter") {
             loadImage()
         } else if (keyCode === "Delete") {
             deleteImage()
         } else if (keyCode === "KeyP" || keyCode === "Space") {
-            pause_play()
+            imageTimer.pause_play()
         }
     },
     true
@@ -34,19 +28,5 @@ function deleteImage() {
         }).then(res => {
             console.log(`${image.filepath} deleted`, res);
         });
-    }
-}
-
-function pause_play() {
-    if (slideTimeout === false) {
-        console.log("Resume the slideshow")
-        slideTimeout = setTimeout(
-            loadImage,
-            150
-        )
-    } else {
-        console.log("Pause the slideshow")
-        clearTimeout(slideTimeout)
-        slideTimeout = false
     }
 }
