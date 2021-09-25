@@ -6,6 +6,19 @@ set -o pipefail
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
 VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
+
+if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
+    IMAGE_REPOSITORY="k3d-registry.localhost"
+    if ping -c1 -q "$IMAGE_REPOSITORY" >/dev/null 2>&1; then
+        IMAGE="${IMAGE_REPOSITORY}:5000/skwr/web/photostream:latest"
+        echo "Uploading: ${IMAGE}"
+        docker push "$IMAGE"
+        exit 0
+    else
+        echo "[ERROR] Undefined var: IMAGE_REPOSITORY_USER"
+        exit 1
+    fi
+fi
 IMAGE="${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
 echo "Uploading: ${IMAGE}"
 
