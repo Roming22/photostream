@@ -1,8 +1,8 @@
+- Warmup the server so the image boots faster
+- Multi-arch builds
+
 - Delete image via icon
 - Add image (update image cache):
 	- via URL
 	- via drag-n-drop
 - Fade in-out icons when the mouse moves/stops
-- Make the app work when proxied
-- Warmup the server so the image boots faster
-- Multi-arch builds

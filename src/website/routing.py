@@ -23,17 +23,24 @@ def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     return render("topic.html", request_data)
 
 
-@APP.route("/<topic>/<name>", methods=["GET", "DELETE"])
-def filename(
+@APP.route("/<topic>/images", methods=["GET"])
+def images(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
+    """Get image URL"""
+    request_data: MutableMapping[str, Any] = {"topic": topic}
+    return render("images.json", request_data)
+
+
+@APP.route("/<topic>/file/<name>", methods=["DELETE"])
+def image(
     topic: str, name: str
 ) -> str:  # pylint: disable=inconsistent-return-statements
-    """Get image URL"""
+    """Delete image"""
     request_data: MutableMapping[str, Any] = {
         "topic": topic,
         "filename": name,
         "http_method": request.method,
     }
-    return render("filename.json", request_data)
+    return render("file.json", request_data)
 
 
 @APP.route("/")

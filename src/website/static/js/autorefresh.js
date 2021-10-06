@@ -1,3 +1,6 @@
+imageList = null
+imageIndex = 0
+
 function adjustableTimer(action, initialMs) {
     // source: https://stackoverflow.com/a/11433429
     return {
@@ -43,25 +46,48 @@ function adjustableTimer(action, initialMs) {
     };
 }
 
+function getImages() {
+    console.log("Load images list")
+    fetch(`/${topic}/images`).then(function (response) {
+        return response.json()
+    }).then(function (data) {
+        console.log(`Data = ${data}`)
+        imageList = data["images"]
+        console.log(`Images = ${imageList}`)
+        loadImage()
+    })
+}
+
+function nextImage() {
+    imageIndex += 1
+    loadImage()
+}
+
+function previousImage() {
+    imageIndex -= 1
+    loadImage()
+}
+
 function loadImage() {
     imageTimer.stop()
-    console.log("Load image")
-    fetch(`/${topic}/random`).then(
-        response => response.json()
-    ).then(
-        data => updateImage(data)
-    )
+
+    imageIndex = imageIndex % imageList.length
+    if (imageIndex < 0) {
+        imageIndex += imageList.length
+    }
+    console.log(`Load image ${imageIndex}`)
+
+    updateImage(imageList[imageIndex])
     imageTimer.start()
 }
 
-function updateImage(data) {
-    image = data
+function updateImage(image) {
     image_element = document.getElementById("image")
     image_element.onload = function () {
         resizeImage(image_element)
     }
-    image_element.src = data.url
-    image_element.alt = data.filepath
+    image_element.src = image.url
+    image_element.alt = image.filename
 }
 
 function resizeImage(img) {
@@ -80,5 +106,6 @@ function resizeImage(img) {
     }
 }
 
-imageTimer = adjustableTimer(loadImage, 6000)
-loadImage()
+
+imageTimer = adjustableTimer(nextImage, 6000)
+getImages()

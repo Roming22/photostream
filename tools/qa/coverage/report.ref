@@ -1,15 +1,16 @@
 Python 3.9
-Name                                  Stmts   Miss  Cover
----------------------------------------------------------
-src/website/__init__.py                   1      0   100%
-src/website/__version__.py                4      1    75%
-src/website/main.py                      20     20     0%
-src/website/pages/__init__.py             7      0   100%
-src/website/pages/_page.py               18      1    94%
-src/website/pages/filename.py            47      6    87%
-src/website/pages/index.py                6      1    83%
-src/website/pages/topic.py                7      0   100%
-src/website/routing.py                   29      6    79%
-src/website/templates/filename.json       1      0   100%
----------------------------------------------------------
-TOTAL                                   140     35    75%
+Name                              Stmts   Miss  Cover
+-----------------------------------------------------
+src/website/__init__.py               1      0   100%
+src/website/__version__.py            4      1    75%
+src/website/main.py                  20     20     0%
+src/website/pages/__init__.py         8      0   100%
+src/website/pages/_page.py           21      1    95%
+src/website/pages/file.py            16      0   100%
+src/website/pages/images.py          36      0   100%
+src/website/pages/index.py            6      1    83%
+src/website/pages/topic.py            7      0   100%
+src/website/routing.py               33      6    82%
+src/website/templates/data.json       1      0   100%
+-----------------------------------------------------
+TOTAL                               153     29    81%

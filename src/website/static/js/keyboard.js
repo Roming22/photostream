@@ -4,13 +4,15 @@ window.addEventListener(
         console.log(`Key pressed ${event.code}/${event.key}/${event.value}`);
         keyCode = event.code
         if (keyCode === "ArrowRight" || keyCode === "Enter") {
-            loadImage()
+            console.log("Next image");
+            nextImage()
+        } else if (keyCode === "ArrowLeft" || keyCode === "Backspace") {
+            console.log("Previous image");
+            previousImage()
         } else if (keyCode === "ArrowDown" || event.key === "-") {
             imageTimer.shift(-1000)
         } else if (keyCode === "ArrowUp" || event.key === "+") {
             imageTimer.shift(1000)
-        } else if (keyCode === "ArrowRight" || keyCode === "Enter") {
-            loadImage()
         } else if (keyCode === "Delete") {
             deleteImage()
         } else if (keyCode === "KeyP" || keyCode === "Space") {

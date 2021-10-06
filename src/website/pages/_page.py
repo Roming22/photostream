@@ -1,8 +1,12 @@
 """Abstract class to dynamically render the right page with the right context"""
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import ClassVar, Mapping, MutableMapping, Type
 
 from flask import render_template
+
+SERVER_DIR = Path(__file__).parent.parent
+IMAGE_DIR = "static/img/topic"
 
 
 class Page(ABC):
