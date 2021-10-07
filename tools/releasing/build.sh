@@ -26,7 +26,7 @@ if [[ -n "${IMAGE_REPOSITORY_USER}" ]]; then
 else
     IMAGE_REPOSITORY_USER="k3d-registry.localhost"
     if ping -c1 -q "$IMAGE_REPOSITORY_USER" >/dev/null 2>&1; then
-        IMAGE_REPOSITORY_USER="${IMAGE_REPOSITORY_USER}/skwr/web"
+        IMAGE_REPOSITORY_USER="${IMAGE_REPOSITORY_USER}:5000/skwr/web"
         docker tag "${TAG}" "${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
     else
         echo "[WARNING] IMAGE_REPOSITORY_USER is not set, image can't be pushed without being retagged";
