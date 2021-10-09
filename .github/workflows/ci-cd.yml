@@ -44,7 +44,5 @@ jobs:
           IMAGE_REPOSITORY_USER: roming22
         run: |
           date
-          make build
-          date
           make upload
           date
