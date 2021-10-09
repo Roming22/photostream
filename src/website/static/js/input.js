@@ -23,13 +23,13 @@ window.addEventListener(
 );
 
 document.addEventListener('swiped-left', function (e) {
-    console.log("Previous image");
-    previousImage()
+    console.log("Next image");
+    nextImage()
 });
 
 document.addEventListener('swiped-right', function (e) {
-    console.log("Next image");
-    nextImage()
+    console.log("Previous image");
+    previousImage()
 });
 
 function deleteImage() {
