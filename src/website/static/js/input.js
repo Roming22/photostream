@@ -22,6 +22,16 @@ window.addEventListener(
     true
 );
 
+document.addEventListener('swiped-left', function (e) {
+    console.log("Previous image");
+    previousImage()
+});
+
+document.addEventListener('swiped-right', function (e) {
+    console.log("Next image");
+    nextImage()
+});
+
 function deleteImage() {
     if (confirm(`Delete ${image.filepath} from ${topic}`)) {
         console.log(`Delete ${image.filename}`)

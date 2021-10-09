@@ -1,5 +1,4 @@
-- Warmup the server so the image boots faster
-
+- Add touch controls for tables/phones (pause/resume)
 - Delete image via icon
 - Add image (update image cache):
 	- via URL
