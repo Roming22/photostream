@@ -5,6 +5,7 @@
 set -o pipefail
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
+python tools/releasing/version.py
 VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
 
 if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
@@ -15,12 +16,12 @@ if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
         docker push "$IMAGE"
         exit 0
     else
-        echo "[ERROR] Undefined var: IMAGE_REPOSITORY_USER"
+        echo "[ERROR] IMAGE_REPOSITORY_USER is not set"
         exit 1
     fi
+else
+    TAG="${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
 fi
-IMAGE="${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
-echo "Uploading: ${IMAGE}"
 
 # Make sure that the credentials have been defined
 [[ -n "${IMAGE_REPOSITORY_TOKEN}" ]] || { \
@@ -31,13 +32,10 @@ echo "Uploading: ${IMAGE}"
     echo "[ERROR] IMAGE_REPOSITORY_URL is not set"; \
     exit 1; \
 }
-[[ -n "${IMAGE_REPOSITORY_USER}" ]] || { \
-    echo "[ERROR] IMAGE_REPOSITORY_USER is not set"; \
-    exit 1; \
-}
 
 # Do not tag anything that does not come from a release branch or the dev branch
 if [[ "${GITHUB_REF}" = refs/heads/release/* || "${GITHUB_REF}" = "refs/heads/dev" ]]; then
+    echo "Tagging ${GITHUB_REF} as ${VERSION}"
     git config --get user.email ||git config --global user.email "cicd@example.com"
     git config --get user.name || git config --global user.name "CI/CD GitHub"
     git tag --annotate "${VERSION}" --message "Automatic release triggered by $(basename "$0")"
@@ -46,7 +44,21 @@ fi
 
 # Upload image only when it comes from a release branch
 if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push" ]]; then
-    echo "Uploading to ${IMAGE_REPOSITORY_URL}"
+    echo "Building and uploading ${TAG}"
+
+    # Not sure why that bit is needed, but multi-arch build is failing if it's not there.
+    docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+    if docker buildx inspect builder >/dev/null; then
+        docker buildx rm builder
+    fi
+    docker buildx create --name builder --driver docker-container --use
+
+    # Build the image
+    DOCKERFILE="${PROJECT_DIR}/tools/tooling/container/Dockerfile"
+    PLATFORM="linux/arm64/v8,linux/amd64"
+    TARGET="release"
     docker login --password "${IMAGE_REPOSITORY_TOKEN}" --username "${IMAGE_REPOSITORY_USER}" "${IMAGE_REPOSITORY_URL}"
-    docker push "${IMAGE}"
+    docker buildx build --file "${DOCKERFILE}" --platform "${PLATFORM}" --push --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
+    echo "Uploaded ${TAG}"
 fi

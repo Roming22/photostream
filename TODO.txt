@@ -1,5 +1,4 @@
 - Warmup the server so the image boots faster
-- Multi-arch builds
 
 - Delete image via icon
 - Add image (update image cache):
