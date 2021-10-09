@@ -5,6 +5,7 @@
 set -o pipefail
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
+python tools/releasing/version.py
 VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
 
 if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
@@ -20,7 +21,6 @@ if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
     fi
 fi
 IMAGE="${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
-echo "Uploading: ${IMAGE}"
 
 # Make sure that the credentials have been defined
 [[ -n "${IMAGE_REPOSITORY_TOKEN}" ]] || { \
@@ -38,6 +38,7 @@ echo "Uploading: ${IMAGE}"
 
 # Do not tag anything that does not come from a release branch or the dev branch
 if [[ "${GITHUB_REF}" = refs/heads/release/* || "${GITHUB_REF}" = "refs/heads/dev" ]]; then
+    echo "Tagging ${GITHUB_REF} as ${VERSION}"
     git config --get user.email ||git config --global user.email "cicd@example.com"
     git config --get user.name || git config --global user.name "CI/CD GitHub"
     git tag --annotate "${VERSION}" --message "Automatic release triggered by $(basename "$0")"
@@ -46,7 +47,21 @@ fi
 
 # Upload image only when it comes from a release branch
 if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push" ]]; then
-    echo "Uploading to ${IMAGE_REPOSITORY_URL}"
+    echo "Building and uploading ${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
+
+    # Not sure why that bit is needed, but multi-arch build is failing if it's not there.
+    docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+    if docker buildx inspect builder >/dev/null; then
+        docker buildx rm builder
+    fi
+    docker buildx create --name builder --driver docker-container --use
+
+    # Build the image
+    DOCKERFILE="${PROJECT_DIR}/tools/tooling/container/Dockerfile"
+    PLATFORM="linux/arm64/v8,linux/amd64"
+    TAG="photostream:$VERSION"
+    TARGET="release"
     docker login --password "${IMAGE_REPOSITORY_TOKEN}" --username "${IMAGE_REPOSITORY_USER}" "${IMAGE_REPOSITORY_URL}"
-    docker push "${IMAGE}"
+    docker buildx build --file "${DOCKERFILE}" --platform "${PLATFORM}" --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
 fi
