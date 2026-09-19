@@ -24,7 +24,7 @@ done
 cd "${PROJECT_DIR}"
 echo "PWD"
 set -x
-poetry run isort --profile=black "${OPTIONS[@]}" "${PATHS[@]}"
-poetry run black "${OPTIONS[@]}" "${PATHS[@]}"
+uv run isort --profile=black "${OPTIONS[@]}" "${PATHS[@]}"
+uv run black "${OPTIONS[@]}" "${PATHS[@]}"
 
 echo [OK]

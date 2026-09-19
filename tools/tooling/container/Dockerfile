@@ -2,7 +2,7 @@
 FROM python:3.9-slim AS builder
 
 # Make sure we don't get notifications we can't answer during building.
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 #
 # Default config
@@ -31,14 +31,10 @@ FROM builder AS release
 
 WORKDIR /opt/app
 
-# Split poetry setup from website data to speed up builds
-COPY --chown=user:user Makefile poetry.lock poetry.toml pyproject.toml /opt/app/
-RUN mkdir website \
-    && touch website/__init__.py \
-    && sed -i -e 's:from = "src":from = ".":' pyproject.toml \
-    && make app \
-    && rm -rf website
-
+# Split dependency setup from website data to speed up builds
+COPY --chown=user:user Makefile uv.lock pyproject.toml /opt/app/
+RUN make app \
+    && sed -i 's|"src/website"|"website"|' pyproject.toml
 COPY --chown=user:user src/ /opt/app/
 
 CMD ["bin/server.sh"]

@@ -28,11 +28,11 @@ run_pylint(){
     DIR="src"
     find "${PROJECT_DIR}/${DIR}" -maxdepth 1 -mindepth 1 -type d -not -name \*.egg-info | while read -r SUBDIR; do
         echo "=> pylint ${PROJECT_DIR}/${DIR}"
-        poetry run pylint --rcfile="${SCRIPT_DIR}/pylintrc.${DIR}.ini" "${SUBDIR}"
+        uv run pylint --rcfile="${SCRIPT_DIR}/pylintrc.${DIR}.ini" "${SUBDIR}"
     done
     DIR="tests"
     echo "=> pylint ${PROJECT_DIR}/${DIR}"
-    poetry run pylint --rcfile="${SCRIPT_DIR}/pylintrc.${DIR}.ini" "${PROJECT_DIR}/${DIR}"
+    uv run pylint --rcfile="${SCRIPT_DIR}/pylintrc.${DIR}.ini" "${PROJECT_DIR}/${DIR}"
 
     echo
 
@@ -40,7 +40,7 @@ run_pylint(){
 
 run_shellcheck(){
     echo "=> shellcheck"
-    find "${PROJECT_DIR}" -name \*.sh -print0 | xargs --no-run-if-empty --null poetry run shellcheck
+    find "${PROJECT_DIR}" -name \*.sh -print0 | xargs --no-run-if-empty --null uv run shellcheck
     echo
 }
 
