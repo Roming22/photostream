@@ -18,7 +18,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9"
+          python-version: "3.14"
       - name: Install environment
         run: |
           date
@@ -39,7 +39,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9"
+          python-version: "3.14"
       - name: Build and upload image
         env:
           IMAGE_REPOSITORY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
