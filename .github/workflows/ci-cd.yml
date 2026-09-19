@@ -30,7 +30,11 @@ jobs:
           date
   CD:
     needs: CI
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || startsWith(github.ref, 'refs/heads/release/'))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python
@@ -39,9 +43,9 @@ jobs:
           python-version: "3.9"
       - name: Build and upload image
         env:
-          IMAGE_REPOSITORY_TOKEN: ${{ secrets.IMAGE_REPOSITORY_TOKEN }}
-          IMAGE_REPOSITORY_URL: docker.io
-          IMAGE_REPOSITORY_USER: roming22
+          IMAGE_REPOSITORY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_REPOSITORY_URL: ghcr.io
+          IMAGE_REPOSITORY_USER: ${{ github.repository_owner }}
         run: |
           date
           make upload

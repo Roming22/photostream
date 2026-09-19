@@ -7,6 +7,7 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
 python tools/releasing/version.py
 VERSION="$(python "${PROJECT_DIR}/src/website/__version__.py")"
+IMAGE_REPOSITORY_USER="${IMAGE_REPOSITORY_USER,,}"
 
 if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
     IMAGE_REPOSITORY="k3d-registry.localhost"
@@ -20,7 +21,7 @@ if [[ -z "${IMAGE_REPOSITORY_USER}" ]]; then
         exit 1
     fi
 else
-    IMAGE="${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
+    IMAGE="${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:${VERSION}"
 fi
 
 # Make sure that the credentials have been defined
@@ -42,12 +43,17 @@ if [[ "${GITHUB_REF}" = refs/heads/release/* || "${GITHUB_REF}" = "refs/heads/de
     git push --follow-tags
 fi
 
-# Upload image only when it comes from a release branch
-if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push" ]]; then
+# Upload image only when it comes from a release branch or dev
+if [[ "${GITHUB_REF}" = refs/heads/release/* ]]; then
+    TAGS="${IMAGE} ${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:latest"
+else
+    TAGS="${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:unstable"
+fi
+
     echo "Building and uploading ${IMAGE}"
 
     # Not sure why that bit is needed, but multi-arch build is failing if it's not there.
-    docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker run --rm --privileged docker.io/multiarch/qemu-user-static --reset -p yes
 
     if docker buildx inspect builder >/dev/null; then
         docker buildx rm builder
@@ -59,8 +65,7 @@ if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push"
     PLATFORM="linux/arm64/v8,linux/amd64"
     TARGET="release"
     docker login --password "${IMAGE_REPOSITORY_TOKEN}" --username "${IMAGE_REPOSITORY_USER}" "${IMAGE_REPOSITORY_URL}"
-    for TAG in ${IMAGE} "${IMAGE_REPOSITORY_USER}/photostream:latest"; do
+    for TAG in ${IMAGE} "${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:latest"; do
         docker buildx build --file "${DOCKERFILE}" --platform "${PLATFORM}" --push --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
     done
-    echo "Uploaded ${TAG}"
-fi
+echo "Uploaded ${TAGS[*]}"
