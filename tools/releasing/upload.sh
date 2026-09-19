@@ -43,8 +43,16 @@ if [[ "${GITHUB_REF}" = refs/heads/release/* || "${GITHUB_REF}" = "refs/heads/de
     git push --follow-tags
 fi
 
-# Upload image only when it comes from a release branch
-if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push" ]]; then
+# Upload image only when it comes from a release branch or dev
+if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+    if [[ "${GITHUB_REF}" = refs/heads/release/* ]]; then
+        TAGS="${IMAGE} ${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:latest"
+    elif [[ "${GITHUB_REF}" = "refs/heads/dev" ]]; then
+        TAGS="${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:unstable"
+    else
+        exit 0
+    fi
+
     echo "Building and uploading ${IMAGE}"
 
     # Not sure why that bit is needed, but multi-arch build is failing if it's not there.
@@ -60,7 +68,7 @@ if [[ "${GITHUB_REF}" = refs/heads/release/* && "${GITHUB_EVENT_NAME}" == "push"
     PLATFORM="linux/arm64/v8,linux/amd64"
     TARGET="release"
     docker login --password "${IMAGE_REPOSITORY_TOKEN}" --username "${IMAGE_REPOSITORY_USER}" "${IMAGE_REPOSITORY_URL}"
-    for TAG in ${IMAGE} "${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:latest"; do
+    for TAG in ${TAGS}; do
         docker buildx build --file "${DOCKERFILE}" --platform "${PLATFORM}" --push --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
     done
     echo "Uploaded ${TAG}"
