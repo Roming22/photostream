@@ -1,4 +1,5 @@
 """Context generator"""
+
 from json import dumps
 from pathlib import Path
 from random import shuffle
