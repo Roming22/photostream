@@ -57,7 +57,7 @@ class Image:
     @classmethod
     def get_image_list_from(cls, topic: str) -> Sequence[Path]:
         """Returns the list of images for a directory"""
-        if topic not in cls._cache.keys():
+        if topic not in cls._cache:
             cls.refresh_image_list_from(topic)
         images = cls._cache[topic]
         return list(images)
