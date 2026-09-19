@@ -31,11 +31,11 @@ FROM builder AS release
 
 WORKDIR /opt/app
 
-# Split poetry setup from website data to speed up builds
-COPY --chown=user:user Makefile poetry.lock poetry.toml pyproject.toml /opt/app/
+# Split dependency setup from website data to speed up builds
+COPY --chown=user:user Makefile uv.lock pyproject.toml /opt/app/
 RUN mkdir website \
     && touch website/__init__.py \
-    && sed -i -e 's:from = "src":from = ".":' pyproject.toml \
+    && sed -i 's|"src/website"|"website"|' pyproject.toml \
     && make app \
     && rm -rf website
 

@@ -50,4 +50,4 @@ This a simple website to display a slideshow of pictures.
 
 ### Makefile
 
-The project uses a `Makefile` as a way to provide quick access to common commands. It should not be used to write complex scripts. It was chosen over `poetry` scripts because `make` is shorter to type than `poetry run`, despite the shortfall of `make` it is everywhere and many developers are used to `make target` commands, and finally the `Makefile` syntax should be awful enough that you would want to write a `shell` or `python` script if you wanted to do something complicated and call that from the `Makefile`.
+The project uses a `Makefile` as a way to provide quick access to common commands. It should not be used to write complex scripts. It was chosen over `uv run` scripts because `make` is shorter to type than `uv run`, despite the shortfall of `make` it is everywhere and many developers are used to `make target` commands, and finally the `Makefile` syntax should be awful enough that you would want to write a `shell` or `python` script if you wanted to do something complicated and call that from the `Makefile`.
