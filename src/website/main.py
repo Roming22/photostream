@@ -4,6 +4,7 @@
 CLI to control the server
 Should contain nothing but the bootstrapping code to start the server
 """
+
 import os
 from functools import partial
 

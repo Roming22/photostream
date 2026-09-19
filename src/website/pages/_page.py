@@ -1,4 +1,5 @@
 """Abstract class to dynamically render the right page with the right context"""
+
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import ClassVar, Mapping, MutableMapping, Type
