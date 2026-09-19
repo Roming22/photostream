@@ -10,9 +10,9 @@ from website.routing import APP
 
 
 @pytest.fixture(name="client")
-def fixture_client() -> Generator[  # pylint: disable=redefined-outer-name
-    FlaskClient, None, None
-]:
+def fixture_client() -> (
+    Generator[FlaskClient, None, None]  # pylint: disable=redefined-outer-name
+):
     with APP.test_client() as test_client:
         yield test_client
 
