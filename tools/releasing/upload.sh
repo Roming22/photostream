@@ -65,7 +65,7 @@ docker run --rm --privileged docker.io/multiarch/qemu-user-static --reset -p yes
     PLATFORM="linux/arm64/v8,linux/amd64"
     TARGET="release"
     docker login --password "${IMAGE_REPOSITORY_TOKEN}" --username "${IMAGE_REPOSITORY_USER}" "${IMAGE_REPOSITORY_URL}"
-    for TAG in ${IMAGE} "${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:latest"; do
+    for TAG in ${TAGS}; do
         docker buildx build --file "${DOCKERFILE}" --platform "${PLATFORM}" --push --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
     done
 echo "Uploaded ${TAGS[*]}"
