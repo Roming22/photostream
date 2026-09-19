@@ -18,8 +18,8 @@ class Page(ABC):
     def __init_subclass__(cls, url: str) -> None:
         """Use dynamic registration of children to avoid circular dependencies"""
         super().__init_subclass__()
-        if url in cls._URL_MAPPING.keys():
-            raise Exception(
+        if url in cls._URL_MAPPING:
+            raise ValueError(
                 f"{url} is already registered by {cls._URL_MAPPING[url].__name__} ({cls._URL_MAPPING[url].__module__})"
             )
         cls._URL_MAPPING[url] = cls
