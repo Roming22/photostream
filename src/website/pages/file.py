@@ -14,6 +14,8 @@ class File(Page, url="file.json"):
         """Return the dictionary with the data used to populate the template"""
         if request_data["http_method"] == "DELETE":
             data = cls.delete_file(request_data["topic"], request_data["filename"])
+        else:
+            raise ValueError(f"Unsupported HTTP method: {request_data['http_method']}")
         context = {"data": dumps(data)}
         return context
 
