@@ -1,4 +1,5 @@
 """Context generator"""
+
 from typing import Mapping
 
 from website.pages._page import Page

@@ -1,4 +1,5 @@
 """Package registration"""
+
 from typing import Mapping
 
 import website.pages.file

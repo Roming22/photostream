@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate """
+"""Generate"""
 
 from datetime import datetime
 from pathlib import Path

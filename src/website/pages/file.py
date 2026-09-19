@@ -1,4 +1,5 @@
 """Context generator"""
+
 from json import dumps
 from typing import Mapping
 
