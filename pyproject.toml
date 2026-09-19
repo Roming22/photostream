@@ -14,6 +14,7 @@ dev = [
     "black>=20.8b1",
     "isort>=5.7.0",
     "mypy>=0.812",
+    "types-waitress>=3.0.0",
     "pyenchant>=3.2.0",
     "pylint>=2.7.0",
     "pytest-cov>=2.11.1",
