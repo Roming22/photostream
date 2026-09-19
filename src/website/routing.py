@@ -3,6 +3,7 @@
 
 Should contain nothing but routing information
 """
+
 import sys
 from traceback import format_exception
 from typing import Any, Mapping, MutableMapping
