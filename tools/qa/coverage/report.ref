@@ -3,14 +3,14 @@ Name                              Stmts   Miss  Cover
 -----------------------------------------------------
 src/website/__init__.py               1      0   100%
 src/website/__version__.py            4      1    75%
-src/website/main.py                  20     20     0%
+src/website/main.py                  19     19     0%
 src/website/pages/__init__.py         8      0   100%
 src/website/pages/_page.py           21      1    95%
-src/website/pages/file.py            16      0   100%
+src/website/pages/file.py            17      1    94%
 src/website/pages/images.py          36      0   100%
 src/website/pages/index.py            6      1    83%
 src/website/pages/topic.py            7      0   100%
-src/website/routing.py               33      6    82%
+src/website/routing.py               32      6    81%
 src/website/templates/data.json       1      0   100%
 -----------------------------------------------------
-TOTAL                               153     29    81%
+TOTAL                               152     29    81%
