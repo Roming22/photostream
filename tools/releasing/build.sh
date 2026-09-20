@@ -12,7 +12,7 @@ if ping -c1 -q "$IMAGE_REPOSITORY_HOST" >/dev/null 2>&1; then
 fi
 VERSION="latest"
 DOCKERFILE="${PROJECT_DIR}/tools/tooling/container/Dockerfile"
-TAG="photostream:latest"
+TAG="photostream:localdev"
 TARGET="release"
 
 docker build --file "${DOCKERFILE}" --tag "${TAG}" --target "${TARGET}" "${PROJECT_DIR}"
