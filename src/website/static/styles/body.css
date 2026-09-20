@@ -1,5 +1,18 @@
+@import url('https://fonts.bunny.net/css?family=barlow-semi-condensed:400,600&display=swap');
+
 body {
-    background-color: rgb(27, 27, 27);
+    /* Layout */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+
+    /* Box model */
     margin: 0;
     padding: 0;
+
+    /* Visual */
+    background-color: rgb(27, 27, 27);
+    color: #d3d3d3;
+    font-family: 'Barlow Semi Condensed', sans-serif;
 }
