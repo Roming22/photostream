@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: photostream
+  namespace: photostream
+  labels:
+    app: photostream
+  annotations:
+    # Uncomment the annotation below to enable automatic TLS via cert-manager.
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: photostream.vsfdmd.ovh  # Replace with your actual hostname
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: photostream
+                port:
+                  name: http
+  # Uncomment and adjust the section below to enable HTTPS via cert-manager:
+  # tls:
+  #   - hosts:
+  #       - photostream.example.com
+  #     secretName: photostream-tls

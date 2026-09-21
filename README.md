@@ -15,6 +15,8 @@
 ## Goal
 This a simple website to display a slideshow of pictures.
 
+Pictures are organized by topic and stored under `src/website/static/img/topic/<topic>/`. In the container, the topic are under `/opt/app/website/static/img`. Each topic gets its own slideshow, accessible at `/<topic>` (e.g. `https://photostream.vsfdmd.ovh/<topic>`).
+
 ## IDE
 
 `Visual Studio Code` is the recommended IDE for this project. It was chosen for the `Remote - Containers` extension that guarantees the same development environment for every developer. The project is configured so that everything works out of the box.

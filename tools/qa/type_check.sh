@@ -13,4 +13,4 @@ run_mypy(){
 }
 
 run_mypy
-echo [OK]
+echo "[OK]"

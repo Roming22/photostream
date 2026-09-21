@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: photostream
+  namespace: photostream
+  labels:
+    app: photostream
+spec:
+  # Keep at 1 replica while the PVC uses ReadWriteOnce.
+  # Scale to multiple replicas only if you switch to a ReadWriteMany storage class.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: photostream
+  template:
+    metadata:
+      labels:
+        app: photostream
+    spec:
+      securityContext:
+        runAsUser: 9999
+        runAsGroup: 9999
+        fsGroup: 9999
+      containers:
+        - name: photostream
+          # Image published by the CI/CD pipeline (tools/releasing/upload.sh).
+          # Replace <owner> with the GitHub organisation or username.
+          image: ghcr.io/roming22/photostream:unstable
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: photos
+              # Photos are served from static/img/topic/ relative to the app root.
+              mountPath: /opt/app/website/static/img/topic
+      volumes:
+        - name: photos
+          persistentVolumeClaim:
+            claimName: photostream-photos

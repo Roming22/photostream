@@ -9,6 +9,15 @@ build: uv.lock
 coverage: uv
 	uv run tools/qa/coverage/update.sh
 
+# Namespace to deploy into (override with: make deploy NAMESPACE=myns)
+NAMESPACE ?= photostream
+K8S_DIR := tools/deployment/kubernetes
+
+deploy:
+	kubectl kustomize "$(K8S_DIR)" \
+	    | sed "s/namespace: photostream/namespace: $(NAMESPACE)/g" \
+	    | kubectl apply -f -
+
 environment: uv uv.lock
 	uv sync
 
@@ -42,6 +51,6 @@ vscode: environment
 	make test_src || true
 
 
-.PHONY: help
+.PHONY: app build coverage deploy environment uv format run_server test test_src test_qa upload vscode help
 help:
 	@LC_ALL=C $(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
