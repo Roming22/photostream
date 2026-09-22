@@ -4,7 +4,10 @@
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/static/styles/body.css">
@@ -27,53 +30,53 @@
 <body>
   <div class="flex-container">
     <img id="image" src="" alt="" />
-  </div>
-  <div class="controls-hud" aria-hidden="true">
-    <a href="/" class="controls-hud__btn" title="Home" aria-label="Home">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5z" fill="currentColor"/>
-      </svg>
-    </a>
-    <button type="button" class="controls-hud__btn" id="controls-shuffle" title="Shuffle" aria-label="Shuffle" aria-pressed="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2"/>
-        <circle cx="8.5" cy="8.5" r="1.25" fill="currentColor"/>
-        <circle cx="15.5" cy="8.5" r="1.25" fill="currentColor"/>
-        <circle cx="12" cy="12" r="1.25" fill="currentColor"/>
-        <circle cx="8.5" cy="15.5" r="1.25" fill="currentColor"/>
-        <circle cx="15.5" cy="15.5" r="1.25" fill="currentColor"/>
-      </svg>
-    </button>
-    <button type="button" class="controls-hud__btn" id="controls-pause" title="Pause" aria-label="Pause">
-      <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 5h3v14H7V5zm7 0h3v14h-3V5z" fill="currentColor"/>
-      </svg>
-      <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8 5v14l11-7L8 5z" fill="currentColor"/>
-      </svg>
-    </button>
-    <button type="button" class="controls-hud__btn" id="controls-shorter" title="Decrease display time" aria-label="Decrease display time">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <button type="button" class="controls-hud__btn" id="controls-longer" title="Increase display time" aria-label="Increase display time">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <button type="button" class="controls-hud__btn" id="controls-fullscreen" title="Fullscreen" aria-label="Fullscreen" aria-pressed="false">
-      <svg class="icon-fullscreen-enter" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <svg class="icon-fullscreen-exit" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </div>
-  <div class="speed-hud" aria-hidden="true">
-    <div class="speed-hud__track">
-      <div class="speed-hud__fill"></div>
+    <div class="controls-hud" aria-hidden="true">
+      <a href="/" class="controls-hud__btn" title="Home" aria-label="Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5z" fill="currentColor"/>
+        </svg>
+      </a>
+      <button type="button" class="controls-hud__btn" id="controls-shuffle" title="Shuffle" aria-label="Shuffle" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="8.5" cy="8.5" r="1.25" fill="currentColor"/>
+          <circle cx="15.5" cy="8.5" r="1.25" fill="currentColor"/>
+          <circle cx="12" cy="12" r="1.25" fill="currentColor"/>
+          <circle cx="8.5" cy="15.5" r="1.25" fill="currentColor"/>
+          <circle cx="15.5" cy="15.5" r="1.25" fill="currentColor"/>
+        </svg>
+      </button>
+      <button type="button" class="controls-hud__btn" id="controls-pause" title="Pause" aria-label="Pause">
+        <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 5h3v14H7V5zm7 0h3v14h-3V5z" fill="currentColor"/>
+        </svg>
+        <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 5v14l11-7L8 5z" fill="currentColor"/>
+        </svg>
+      </button>
+      <button type="button" class="controls-hud__btn" id="controls-shorter" title="Decrease display time" aria-label="Decrease display time">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button type="button" class="controls-hud__btn" id="controls-longer" title="Increase display time" aria-label="Increase display time">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button type="button" class="controls-hud__btn" id="controls-fullscreen" title="Fullscreen" aria-label="Fullscreen" aria-pressed="false">
+        <svg class="icon-fullscreen-enter" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="icon-fullscreen-exit" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="speed-hud" aria-hidden="true">
+      <div class="speed-hud__track">
+        <div class="speed-hud__fill"></div>
+      </div>
     </div>
   </div>
 </body>

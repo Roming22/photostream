@@ -8,6 +8,13 @@
   height: 100dvh;
   justify-content:center;
   align-items:center;
+  background: rgb(27, 27, 27);
+}
+
+.flex-container:fullscreen,
+.flex-container:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
 }
 
 /* Fallback when Fullscreen API is unavailable (common on iOS Safari). */
@@ -22,23 +29,7 @@ html.is-immersive .flex-container {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  /* Cover the dynamic Safari chrome area when possible. */
   min-height: -webkit-fill-available;
-}
-
-html.is-immersive .flex-container:fullscreen,
-html.is-immersive .flex-container:-webkit-full-screen {
-  background: rgb(27, 27, 27);
-}
-
-.flex-container:fullscreen,
-.flex-container:-webkit-full-screen {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  background: rgb(27, 27, 27);
 }
 
 .controls-hud {

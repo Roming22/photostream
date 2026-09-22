@@ -38,16 +38,78 @@ function scheduleHideControlsHud({ ignoreHover = false } = {}) {
     }, CONTROLS_HUD_MS)
 }
 
-function isFullscreen() {
-    return Boolean(document.fullscreenElement)
+function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null
 }
 
-function toggleFullscreen() {
-    if (isFullscreen()) {
-        document.exitFullscreen().catch(() => {})
-    } else {
-        document.documentElement.requestFullscreen().catch(() => {})
+function isImmersive() {
+    return document.documentElement.classList.contains("is-immersive")
+}
+
+function isFullscreen() {
+    return Boolean(getFullscreenElement()) || isImmersive()
+}
+
+function setImmersive(on) {
+    document.documentElement.classList.toggle("is-immersive", on)
+    syncControlsHud()
+}
+
+function requestNativeFullscreen(el) {
+    if (el.requestFullscreen) {
+        return el.requestFullscreen({ navigationUI: "hide" }).catch(() =>
+            el.requestFullscreen()
+        )
     }
+    if (el.webkitRequestFullscreen) {
+        return Promise.resolve(el.webkitRequestFullscreen())
+    }
+    return Promise.reject(new Error("Fullscreen API unavailable"))
+}
+
+function exitNativeFullscreen() {
+    if (document.exitFullscreen) {
+        return document.exitFullscreen()
+    }
+    if (document.webkitExitFullscreen) {
+        return document.webkitExitFullscreen()
+    }
+    return Promise.reject(new Error("Fullscreen API unavailable"))
+}
+
+async function toggleFullscreen() {
+    if (getFullscreenElement()) {
+        try {
+            await exitNativeFullscreen()
+        } catch {
+            setImmersive(false)
+        }
+        return
+    }
+    if (isImmersive()) {
+        setImmersive(false)
+        return
+    }
+
+    // Prefer html/body so the controls HUD stays in the fullscreen tree.
+    // Some iOS builds only accept a concrete element; try the stage last.
+    const targets = [
+        document.documentElement,
+        document.body,
+        document.querySelector(".flex-container"),
+    ].filter(Boolean)
+
+    for (const el of targets) {
+        try {
+            await requestNativeFullscreen(el)
+            return
+        } catch {
+            // Try the next target, then fall back to CSS immersive mode.
+        }
+    }
+
+    // iOS Safari (and non-secure contexts) often lack usable Fullscreen API.
+    setImmersive(true)
 }
 
 function syncControlsHud() {
@@ -73,6 +135,11 @@ function syncControlsHud() {
         fullscreenBtn.setAttribute("aria-pressed", fullscreen ? "true" : "false")
         fullscreenBtn.title = fullscreen ? "Exit fullscreen" : "Fullscreen"
         fullscreenBtn.setAttribute("aria-label", fullscreen ? "Exit fullscreen" : "Fullscreen")
+    }
+
+    const image = document.getElementById("image")
+    if (image && image.naturalWidth) {
+        resizeImage(image)
     }
 }
 
@@ -174,6 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
     document.addEventListener("fullscreenchange", syncControlsHud)
+    document.addEventListener("webkitfullscreenchange", syncControlsHud)
     syncControlsHud()
 })
 
