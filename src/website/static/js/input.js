@@ -1,3 +1,60 @@
+const CONTROLS_HUD_MS = 1000
+
+let controlsHudHideTimer = null
+
+function controlsHud() {
+    return document.querySelector(".controls-hud")
+}
+
+function showControlsHud() {
+    const hud = controlsHud()
+    if (!hud) {
+        return
+    }
+    hud.classList.add("is-visible")
+    hud.setAttribute("aria-hidden", "false")
+    scheduleHideControlsHud()
+}
+
+function hideControlsHud() {
+    const hud = controlsHud()
+    if (!hud) {
+        return
+    }
+    hud.classList.remove("is-visible")
+    hud.setAttribute("aria-hidden", "true")
+}
+
+function scheduleHideControlsHud({ ignoreHover = false } = {}) {
+    const hud = controlsHud()
+    clearTimeout(controlsHudHideTimer)
+    controlsHudHideTimer = setTimeout(() => {
+        // :hover can stick after a tap on touch devices; ignoreHover
+        // lets button presses dismiss the HUD anyway.
+        if (!hud || (!ignoreHover && hud.matches(":hover"))) {
+            return
+        }
+        hideControlsHud()
+    }, CONTROLS_HUD_MS)
+}
+
+function syncControlsHud() {
+    const pauseBtn = document.getElementById("controls-pause")
+    const shuffleBtn = document.getElementById("controls-shuffle")
+    if (!pauseBtn || !shuffleBtn) {
+        return
+    }
+
+    const paused = imageTimer.isPaused()
+    pauseBtn.classList.toggle("is-paused", paused)
+    pauseBtn.title = paused ? "Play" : "Pause"
+    pauseBtn.setAttribute("aria-label", paused ? "Play" : "Pause")
+
+    shuffleBtn.setAttribute("aria-pressed", shuffle ? "true" : "false")
+    shuffleBtn.title = shuffle ? "Disable shuffle" : "Enable shuffle"
+    shuffleBtn.setAttribute("aria-label", shuffle ? "Disable shuffle" : "Enable shuffle")
+}
+
 window.addEventListener(
     'keydown',
     (event) => {
@@ -33,6 +90,48 @@ document.addEventListener('swiped-right', function (e) {
     console.log("Previous image");
     previousImage()
 });
+
+document.addEventListener("mousemove", showControlsHud)
+document.addEventListener("touchstart", showControlsHud, { passive: true })
+document.addEventListener("touchmove", showControlsHud, { passive: true })
+
+document.addEventListener("DOMContentLoaded", () => {
+    const hud = controlsHud()
+    const pauseBtn = document.getElementById("controls-pause")
+    const shuffleBtn = document.getElementById("controls-shuffle")
+    const shorterBtn = document.getElementById("controls-shorter")
+    const longerBtn = document.getElementById("controls-longer")
+
+    if (hud) {
+        hud.addEventListener("mouseenter", () => clearTimeout(controlsHudHideTimer))
+        hud.addEventListener("mouseleave", () => scheduleHideControlsHud())
+    }
+    if (pauseBtn) {
+        pauseBtn.addEventListener("click", () => {
+            imageTimer.pause_play()
+            scheduleHideControlsHud({ ignoreHover: true })
+        })
+    }
+    if (shuffleBtn) {
+        shuffleBtn.addEventListener("click", () => {
+            toggleShuffle()
+            scheduleHideControlsHud({ ignoreHover: true })
+        })
+    }
+    if (shorterBtn) {
+        shorterBtn.addEventListener("click", () => {
+            imageTimer.shift(-Math.round(imageTimer.initialMs / 3))
+            scheduleHideControlsHud({ ignoreHover: true })
+        })
+    }
+    if (longerBtn) {
+        longerBtn.addEventListener("click", () => {
+            imageTimer.shift(Math.round(imageTimer.initialMs / 3))
+            scheduleHideControlsHud({ ignoreHover: true })
+        })
+    }
+    syncControlsHud()
+})
 
 function deleteImage() {
     if (confirm(`Delete ${image.filepath} from ${topic}`)) {

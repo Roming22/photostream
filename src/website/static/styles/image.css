@@ -9,6 +9,75 @@
   align-items:center;
 }
 
+.controls-hud {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.45rem;
+  border-radius: 0.45rem;
+  background: rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.controls-hud.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.controls-hud__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+  appearance: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.controls-hud__btn:hover,
+.controls-hud__btn:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  outline: none;
+}
+
+.controls-hud__btn[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.42);
+  color: #fff;
+}
+
+.controls-hud__btn svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+}
+
+.controls-hud__btn .icon-play {
+  display: none;
+}
+
+.controls-hud__btn.is-paused .icon-pause {
+  display: none;
+}
+
+.controls-hud__btn.is-paused .icon-play {
+  display: block;
+}
+
 .speed-hud {
   position: fixed;
   left: 50%;

@@ -48,21 +48,30 @@ function adjustableTimer(action, initialMs) {
             this.stop()
             this.startTime = new Date()
             this.timerId = setTimeout(this.action, this.initialMs)
+            if (typeof syncControlsHud === "function") {
+                syncControlsHud()
+            }
         },
         stop: function () {
             if (this.timerId) {
                 clearTimeout(this.timerId)
+                this.timerId = null
             }
         },
         pause_play: function () {
             if (this.timerId) {
                 console.log("Pause the slideshow")
                 this.stop()
-                this.timerId = null
             } else {
                 console.log("Resume the slideshow")
                 this.timerId = setTimeout(this.action, 150)
             }
+            if (typeof syncControlsHud === "function") {
+                syncControlsHud()
+            }
+        },
+        isPaused: function () {
+            return !this.timerId
         },
     };
 }
@@ -83,6 +92,9 @@ function getImages() {
 function toggleShuffle() {
     shuffle = !shuffle
     console.log(`Shuffle: ${shuffle}`)
+    if (typeof syncControlsHud === "function") {
+        syncControlsHud()
+    }
     getImages()
 }
 
