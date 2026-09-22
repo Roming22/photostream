@@ -62,20 +62,30 @@ window.addEventListener(
         keyCode = event.code
         if (keyCode === "ArrowRight" || keyCode === "Enter") {
             console.log("Next image");
+            event.preventDefault()
             nextImage()
         } else if (keyCode === "ArrowLeft" || keyCode === "Backspace") {
             console.log("Previous image");
+            event.preventDefault()
             previousImage()
         } else if (keyCode === "ArrowDown" || event.key === "-") {
+            console.log("Shorter delay");
+            event.preventDefault()
             imageTimer.shift(-Math.round(imageTimer.initialMs / 3))
         } else if (keyCode === "ArrowUp" || event.key === "+") {
+            console.log("Longer delay");
+            event.preventDefault()
             imageTimer.shift(Math.round(imageTimer.initialMs / 3))
         } else if (keyCode === "Delete") {
             deleteImage()
         } else if (keyCode === "KeyP" || keyCode === "Space") {
+            console.log("Play/Pause");
+            event.preventDefault()
             imageTimer.pause_play()
+            showControlsHud()
         } else if (keyCode === "KeyS") {
             toggleShuffle()
+            showControlsHud()
         }
     },
     true
