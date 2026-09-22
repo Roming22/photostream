@@ -12,10 +12,22 @@
 
   <link rel="shortcut icon" type="image/jpg" href="/static/img/favicon.ico" />
   <title>PhotoStream</title>
+  <style>
+    body { flex-direction: column; justify-content: flex-start; align-items: center; }
+  </style>
 </head>
 
 <body>
-  <h1>PhotoStream</h1>
+  <div>
+    <h1>PhotoStream</h1>
+  </div>
+  <div>
+    <ul>
+      {% for topic in topics %}
+      <li><a href="/{{ topic }}">{{ topic }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 </body>
 
 </html>

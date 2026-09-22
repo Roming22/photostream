@@ -24,7 +24,6 @@ spec:
       containers:
         - name: photostream
           # Image published by the CI/CD pipeline (tools/releasing/upload.sh).
-          # Replace <owner> with the GitHub organisation or username.
           image: ghcr.io/roming22/photostream:unstable
           imagePullPolicy: Always
           ports:

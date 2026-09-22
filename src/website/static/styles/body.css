@@ -15,4 +15,11 @@ body {
     background-color: rgb(27, 27, 27);
     color: #d3d3d3;
     font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 22pt;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    font-family: inherit;
 }

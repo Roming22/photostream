@@ -27,7 +27,7 @@ class Images(Page, url="images.json"):
         """Return a list of all the images, optionally shuffled.
 
         :param topic: topic to pull the filename from.
-        :param shuffled: when True, randomise the order of the images.
+        :param shuffled: when True, randomize the order of the images.
 
         :return: A map with the image attributes.
         """

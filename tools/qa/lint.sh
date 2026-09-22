@@ -6,6 +6,8 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(realpath "${SCRIPT_DIR}/../..")"
 cd "${PROJECT_DIR}"
 
+export PYLINTHOME="${PROJECT_DIR}/.cache/pylint"
+
 parse_args(){
     LINTERS=()
     while [[ "$#" -gt "0" ]]; do
@@ -27,7 +29,7 @@ parse_args(){
 run_pylint(){
     DIR="src"
     find "${PROJECT_DIR}/${DIR}" -maxdepth 1 -mindepth 1 -type d -not -name \*.egg-info | while read -r SUBDIR; do
-        echo "=> pylint ${PROJECT_DIR}/${DIR}"
+        echo "=> pylint ${SUBDIR}"
         uv run pylint --rcfile="${SCRIPT_DIR}/pylintrc.${DIR}.ini" "${SUBDIR}"
     done
     DIR="tests"

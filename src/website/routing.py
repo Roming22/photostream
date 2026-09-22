@@ -23,7 +23,9 @@ def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     request_data: MutableMapping[str, Any] = {
         "topic": topic,
         "shuffle": request.args.get("shuffle", "false").lower() == "true",
-        "time": min(max(int(float(request.args.get("time", "3")) * 1000), 175), 300_000),
+        "time": min(
+            max(int(float(request.args.get("time", "3")) * 1000), 175), 300_000
+        ),
     }
     return render("topic.html", request_data)
 
