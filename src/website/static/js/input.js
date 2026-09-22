@@ -38,9 +38,22 @@ function scheduleHideControlsHud({ ignoreHover = false } = {}) {
     }, CONTROLS_HUD_MS)
 }
 
+function isFullscreen() {
+    return Boolean(document.fullscreenElement)
+}
+
+function toggleFullscreen() {
+    if (isFullscreen()) {
+        document.exitFullscreen().catch(() => {})
+    } else {
+        document.documentElement.requestFullscreen().catch(() => {})
+    }
+}
+
 function syncControlsHud() {
     const pauseBtn = document.getElementById("controls-pause")
     const shuffleBtn = document.getElementById("controls-shuffle")
+    const fullscreenBtn = document.getElementById("controls-fullscreen")
     if (!pauseBtn || !shuffleBtn) {
         return
     }
@@ -53,6 +66,14 @@ function syncControlsHud() {
     shuffleBtn.setAttribute("aria-pressed", shuffle ? "true" : "false")
     shuffleBtn.title = shuffle ? "Disable shuffle" : "Enable shuffle"
     shuffleBtn.setAttribute("aria-label", shuffle ? "Disable shuffle" : "Enable shuffle")
+
+    if (fullscreenBtn) {
+        const fullscreen = isFullscreen()
+        fullscreenBtn.classList.toggle("is-fullscreen", fullscreen)
+        fullscreenBtn.setAttribute("aria-pressed", fullscreen ? "true" : "false")
+        fullscreenBtn.title = fullscreen ? "Exit fullscreen" : "Fullscreen"
+        fullscreenBtn.setAttribute("aria-label", fullscreen ? "Exit fullscreen" : "Fullscreen")
+    }
 }
 
 window.addEventListener(
@@ -86,6 +107,11 @@ window.addEventListener(
         } else if (keyCode === "KeyS") {
             toggleShuffle()
             showControlsHud()
+        } else if (keyCode === "KeyF") {
+            console.log("Fullscreen");
+            event.preventDefault()
+            toggleFullscreen()
+            showControlsHud()
         }
     },
     true
@@ -111,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const shuffleBtn = document.getElementById("controls-shuffle")
     const shorterBtn = document.getElementById("controls-shorter")
     const longerBtn = document.getElementById("controls-longer")
+    const fullscreenBtn = document.getElementById("controls-fullscreen")
 
     if (hud) {
         hud.addEventListener("mouseenter", () => clearTimeout(controlsHudHideTimer))
@@ -140,6 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
             scheduleHideControlsHud({ ignoreHover: true })
         })
     }
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener("click", () => {
+            toggleFullscreen()
+            scheduleHideControlsHud({ ignoreHover: true })
+        })
+    }
+    document.addEventListener("fullscreenchange", syncControlsHud)
     syncControlsHud()
 })
 

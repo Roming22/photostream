@@ -17,6 +17,8 @@ deploy:
 	kubectl kustomize "$(K8S_DIR)" \
 	    | sed "s/namespace: photostream/namespace: $(NAMESPACE)/g" \
 	    | kubectl apply -f -
+	kubectl rollout restart deployment/photostream -n "$(NAMESPACE)"
+
 
 environment: uv uv.lock
 	uv sync
