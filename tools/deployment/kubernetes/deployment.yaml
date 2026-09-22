@@ -24,7 +24,7 @@ spec:
       containers:
         - name: photostream
           # Image published by the CI/CD pipeline (tools/releasing/upload.sh).
-          image: ghcr.io/roming22/photostream:unstable
+          image: ghcr.io/roming22/photostream:0.1
           imagePullPolicy: Always
           ports:
             - name: http
