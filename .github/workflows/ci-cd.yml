@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - name: Detect changed paths
         id: filter
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         with:
           # Compare against the previous commit on the same branch.
           base: ${{ github.ref }}
