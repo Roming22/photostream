@@ -30,11 +30,12 @@ FROM builder AS release
 
 
 WORKDIR /opt/app
+# Source is copied flat (website/, bin/) after deps; server.sh relies on this.
+ENV PYTHONPATH=/opt/app
 
 # Split dependency setup from website data to speed up builds
 COPY --chown=user:user Makefile uv.lock pyproject.toml /opt/app/
-RUN make app \
-    && sed -i 's|"src/website"|"website"|' pyproject.toml
+RUN make app
 COPY --chown=user:user src/ /opt/app/
 
 CMD ["bin/server.sh"]

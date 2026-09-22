@@ -5,8 +5,31 @@
   top:0px;
   width:100%;
   height:100%;
+  height: 100dvh;
   justify-content:center;
   align-items:center;
+  background: rgb(27, 27, 27);
+}
+
+.flex-container:fullscreen,
+.flex-container:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+/* Fallback when Fullscreen API is unavailable (common on iOS Safari). */
+html.is-immersive,
+html.is-immersive body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html.is-immersive .flex-container {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
 }
 
 .controls-hud {
