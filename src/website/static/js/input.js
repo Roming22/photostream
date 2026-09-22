@@ -50,9 +50,45 @@ function isFullscreen() {
     return Boolean(getFullscreenElement()) || isImmersive()
 }
 
+function isIphone() {
+    return /iPhone|iPod/.test(navigator.userAgent)
+}
+
+function stageEl() {
+    return document.querySelector(".flex-container")
+}
+
 function setImmersive(on) {
     document.documentElement.classList.toggle("is-immersive", on)
+    syncStageViewport()
     syncControlsHud()
+}
+
+function syncStageViewport() {
+    const stage = stageEl()
+    if (!stage) {
+        return
+    }
+
+    const vv = window.visualViewport
+    // iOS Safari's layout viewport lags the visible area in landscape and when
+    // browser chrome shows/hides; pin the stage to the visual viewport.
+    if (vv && (isIphone() || isImmersive() || getFullscreenElement())) {
+        stage.style.width = `${Math.round(vv.width)}px`
+        stage.style.height = `${Math.round(vv.height)}px`
+        stage.style.left = `${Math.round(vv.offsetLeft)}px`
+        stage.style.top = `${Math.round(vv.offsetTop)}px`
+    } else {
+        stage.style.width = ""
+        stage.style.height = ""
+        stage.style.left = ""
+        stage.style.top = ""
+    }
+
+    const image = document.getElementById("image")
+    if (image && image.naturalWidth) {
+        resizeImage(image)
+    }
 }
 
 function requestNativeFullscreen(el) {
@@ -91,24 +127,26 @@ async function toggleFullscreen() {
         return
     }
 
-    // Prefer html/body so the controls HUD stays in the fullscreen tree.
-    // Some iOS builds only accept a concrete element; try the stage last.
-    const targets = [
-        document.documentElement,
-        document.body,
-        document.querySelector(".flex-container"),
-    ].filter(Boolean)
+    // iPhone has no usable element Fullscreen API (video-only); skip straight
+    // to immersive mode so we don't burn the tap on rejected requests.
+    if (!isIphone()) {
+        const targets = [
+            document.documentElement,
+            document.body,
+            stageEl(),
+        ].filter(Boolean)
 
-    for (const el of targets) {
-        try {
-            await requestNativeFullscreen(el)
-            return
-        } catch {
-            // Try the next target, then fall back to CSS immersive mode.
+        for (const el of targets) {
+            try {
+                await requestNativeFullscreen(el)
+                syncStageViewport()
+                return
+            } catch {
+                // Try the next target, then fall back to CSS immersive mode.
+            }
         }
     }
 
-    // iOS Safari (and non-secure contexts) often lack usable Fullscreen API.
     setImmersive(true)
 }
 
@@ -135,11 +173,6 @@ function syncControlsHud() {
         fullscreenBtn.setAttribute("aria-pressed", fullscreen ? "true" : "false")
         fullscreenBtn.title = fullscreen ? "Exit fullscreen" : "Fullscreen"
         fullscreenBtn.setAttribute("aria-label", fullscreen ? "Exit fullscreen" : "Fullscreen")
-    }
-
-    const image = document.getElementById("image")
-    if (image && image.naturalWidth) {
-        resizeImage(image)
     }
 }
 
@@ -240,8 +273,23 @@ document.addEventListener("DOMContentLoaded", () => {
             scheduleHideControlsHud({ ignoreHover: true })
         })
     }
-    document.addEventListener("fullscreenchange", syncControlsHud)
-    document.addEventListener("webkitfullscreenchange", syncControlsHud)
+    document.addEventListener("fullscreenchange", () => {
+        syncStageViewport()
+        syncControlsHud()
+    })
+    document.addEventListener("webkitfullscreenchange", () => {
+        syncStageViewport()
+        syncControlsHud()
+    })
+
+    const onViewportChange = () => syncStageViewport()
+    window.addEventListener("resize", onViewportChange)
+    window.addEventListener("orientationchange", onViewportChange)
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", onViewportChange)
+        window.visualViewport.addEventListener("scroll", onViewportChange)
+    }
+    syncStageViewport()
     syncControlsHud()
 })
 
