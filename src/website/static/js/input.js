@@ -17,6 +17,8 @@ window.addEventListener(
             deleteImage()
         } else if (keyCode === "KeyP" || keyCode === "Space") {
             imageTimer.pause_play()
+        } else if (keyCode === "KeyS") {
+            toggleShuffle()
         }
     },
     true
