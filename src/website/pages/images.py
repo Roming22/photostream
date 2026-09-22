@@ -17,15 +17,17 @@ class Images(Page, url="images.json"):
     @classmethod
     def get_context(cls, request_data: Mapping) -> Mapping:
         """Return the dictionary with the data used to populate the template"""
-        data = cls.get_images(request_data["topic"])
+        shuffled = bool(request_data.get("shuffle", False))
+        data = cls.get_images(request_data["topic"], shuffled=shuffled)
         context = {"data": dumps(data)}
         return context
 
     @classmethod
-    def get_images(cls, topic: str) -> Mapping:
-        """Return a shuffled list of all the images
+    def get_images(cls, topic: str, *, shuffled: bool = False) -> Mapping:
+        """Return a list of all the images, optionally shuffled.
 
         :param topic: topic to pull the filename from.
+        :param shuffled: when True, randomise the order of the images.
 
         :return: A map with the image attributes.
         """
@@ -39,7 +41,8 @@ class Images(Page, url="images.json"):
                 for f in images
             ]
         }
-        shuffle(data["images"])
+        if shuffled:
+            shuffle(data["images"])
         return data
 
 

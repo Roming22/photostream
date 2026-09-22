@@ -20,14 +20,20 @@ LOGGER = create_logger(APP)
 @APP.route("/<topic>")
 def index(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     """Website homepage"""
-    request_data = {"topic": topic}
+    request_data: MutableMapping[str, Any] = {
+        "topic": topic,
+        "shuffle": request.args.get("shuffle", "false").lower() == "true",
+    }
     return render("topic.html", request_data)
 
 
 @APP.route("/<topic>/images", methods=["GET"])
 def images(topic: str) -> str:  # pylint: disable=inconsistent-return-statements
     """Get image URL"""
-    request_data: MutableMapping[str, Any] = {"topic": topic}
+    request_data: MutableMapping[str, Any] = {
+        "topic": topic,
+        "shuffle": request.args.get("shuffle", "false").lower() == "true",
+    }
     return render("images.json", request_data)
 
 

@@ -11,5 +11,8 @@ class Topic(Page, url="topic.html"):
     @classmethod
     def get_context(cls, request_data: Mapping) -> Mapping:
         """Return the dictionary with the data used to populate the template"""
-        context = {"topic": request_data["topic"]}
+        context = {
+            "topic": request_data["topic"],
+            "shuffle": request_data.get("shuffle", False),
+        }
         return context

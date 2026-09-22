@@ -48,7 +48,7 @@ function adjustableTimer(action, initialMs) {
 
 function getImages() {
     console.log("Load images list")
-    fetch(`/${topic}/images`).then(function (response) {
+    fetch(`/${topic}/images?shuffle=${shuffle}`).then(function (response) {
         return response.json()
     }).then(function (data) {
         console.log(`Data = ${data}`)
