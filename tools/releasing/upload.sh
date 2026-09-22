@@ -51,6 +51,7 @@ case "${GITHUB_REF}" in
         git push --follow-tags
 
         # Add the tags to the build arguments and the list of tags
+        TAGS+=("${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:${VERSION%.*}")
         TAGS+=("${IMAGE_REPOSITORY_URL}/${IMAGE_REPOSITORY_USER}/photostream:latest")
         ;;
     refs/heads/dev)
