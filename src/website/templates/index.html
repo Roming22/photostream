@@ -1,33 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="index-html">
 
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/static/styles/body.css">
-  <link rel="stylesheet" href="/static/styles/image.css">
+  <link rel="stylesheet" href="/static/styles/index.css">
 
   <link rel="shortcut icon" type="image/jpg" href="/static/img/favicon.ico" />
   <title>PhotoStream</title>
-  <style>
-    body { flex-direction: column; justify-content: flex-start; align-items: center; }
-  </style>
 </head>
 
-<body>
-  <div>
-    <h1>PhotoStream</h1>
+<body class="index-page">
+  <div class="index-mask">
+    <h1 class="index-title">PhotoStream</h1>
   </div>
-  <div>
-    <ul>
-      {% for topic in topics %}
-      <li><a href="/{{ topic }}">{{ topic }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
+  <ul class="index-toc">
+    {% for topic in topics %}
+    <li><a href="/{{ topic }}">{{ topic }}</a></li>
+    {% endfor %}
+  </ul>
+  <script src="/static/js/index.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,67 @@
+html.index-html {
+    height: 100%;
+}
+
+.index-page {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+.index-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    /* svh = visible area when browser chrome is shown; avoids a low “center” */
+    height: 100vh;
+    height: 100dvh;
+    height: 100svh;
+    background-color: rgb(27, 27, 27);
+    pointer-events: none;
+    opacity: 1;
+    will-change: opacity;
+}
+
+.index-title {
+    position: absolute;
+    /* Optical vertical center — geometric 50% reads low for a single-line hero */
+    top: 40%;
+    left: 50%;
+    margin: 0;
+    padding: 0;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    transform: translate(-50%, -50%);
+}
+
+.index-toc {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    width: min(28rem, 90vw);
+    min-height: 220vh;
+    margin: 0;
+    padding: 50vh 0 60vh;
+    list-style: none;
+    text-align: center;
+}
+
+.index-toc li {
+    margin: 0.6em 0;
+}
+
+.index-toc a {
+    display: inline-block;
+    transition: color 0.15s ease, letter-spacing 0.15s ease;
+}
+
+.index-toc a:hover {
+    color: #ffffff;
+    letter-spacing: 0.06em;
+}
