@@ -10,9 +10,9 @@ window.addEventListener(
             console.log("Previous image");
             previousImage()
         } else if (keyCode === "ArrowDown" || event.key === "-") {
-            imageTimer.shift(-1000)
+            imageTimer.shift(-Math.round(imageTimer.initialMs / 3))
         } else if (keyCode === "ArrowUp" || event.key === "+") {
-            imageTimer.shift(1000)
+            imageTimer.shift(Math.round(imageTimer.initialMs / 3))
         } else if (keyCode === "Delete") {
             deleteImage()
         } else if (keyCode === "KeyP" || keyCode === "Space") {

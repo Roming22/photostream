@@ -14,5 +14,6 @@ class Topic(Page, url="topic.html"):
         context = {
             "topic": request_data["topic"],
             "shuffle": request_data.get("shuffle", False),
+            "time": request_data.get("time", 3000),
         }
         return context

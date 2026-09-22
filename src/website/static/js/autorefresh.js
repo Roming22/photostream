@@ -1,6 +1,9 @@
 imageList = null
 imageIndex = 0
 
+const TIMER_MIN_MS = 175
+const TIMER_MAX_MS = 5 * 60 * 1000  // 5 minutes
+
 function adjustableTimer(action, initialMs) {
     // source: https://stackoverflow.com/a/11433429
     return {
@@ -11,16 +14,10 @@ function adjustableTimer(action, initialMs) {
         shift: function (howMuch) {
             var elapsedTime = new Date() - this.startTime;
             var remainingTime = this.initialMs - elapsedTime;
-            var newTime = remainingTime + howMuch;
-            if (newTime < 150) {
-                newTime = 150
-            }
+            var newTime = Math.min(Math.max(remainingTime + howMuch, TIMER_MIN_MS), TIMER_MAX_MS);
             this.stop()
             this.timerId = setTimeout(this.action, newTime);
-            this.initialMs += howMuch
-            if (this.initialMs < 1000) {
-                this.initialMs = 1000
-            }
+            this.initialMs = Math.min(Math.max(this.initialMs + howMuch, TIMER_MIN_MS), TIMER_MAX_MS);
             console.log(`Timer: ${this.initialMs}ms`)
         },
         start: function () {
@@ -107,5 +104,5 @@ function resizeImage(img) {
 }
 
 
-imageTimer = adjustableTimer(nextImage, 6000)
+imageTimer = adjustableTimer(nextImage, time)
 getImages()
