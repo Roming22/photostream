@@ -1,7 +1,11 @@
 .DEFAULT_GOAL := build
 
-app: environment
+# Container image only: install deps without the project package. Source is
+# copied in a later layer and located via PYTHONPATH (see bin/server.sh).
+app: uv uv.lock
+	uv sync --no-install-project --no-dev
 	rm Makefile uv.lock
+
 
 build: uv.lock
 	"tools/releasing/build.sh"
