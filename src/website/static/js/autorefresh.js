@@ -3,6 +3,29 @@ imageIndex = 0
 
 const TIMER_MIN_MS = 175
 const TIMER_MAX_MS = 5 * 60 * 1000  // 5 minutes
+const SPEED_HUD_MS = 1000
+
+let speedHudHideTimer = null
+
+function showSpeedFeedback(ms) {
+    const hud = document.querySelector(".speed-hud")
+    const fill = document.querySelector(".speed-hud__fill")
+    if (!hud || !fill) {
+        return
+    }
+
+    // Log scale; fuller = slower (longer interval).
+    const logMin = Math.log(TIMER_MIN_MS)
+    const logMax = Math.log(TIMER_MAX_MS)
+    const ratio = (Math.log(ms) - logMin) / (logMax - logMin)
+    fill.style.width = `${Math.min(1, Math.max(0, ratio)) * 100}%`
+
+    hud.classList.add("is-visible")
+    clearTimeout(speedHudHideTimer)
+    speedHudHideTimer = setTimeout(() => {
+        hud.classList.remove("is-visible")
+    }, SPEED_HUD_MS)
+}
 
 function adjustableTimer(action, initialMs) {
     // source: https://stackoverflow.com/a/11433429
@@ -19,6 +42,7 @@ function adjustableTimer(action, initialMs) {
             this.timerId = setTimeout(this.action, newTime);
             this.initialMs = Math.min(Math.max(this.initialMs + howMuch, TIMER_MIN_MS), TIMER_MAX_MS);
             console.log(`Timer: ${this.initialMs}ms`)
+            showSpeedFeedback(this.initialMs)
         },
         start: function () {
             this.stop()
