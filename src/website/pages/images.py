@@ -29,7 +29,7 @@ class Images(Page, url="images.json"):
 
         :return: A map with the image attributes.
         """
-        images = Image.get_images_from(topic)
+        images = Image.get_image_list_from(topic)
         data = {
             "images": [
                 {
@@ -47,12 +47,6 @@ class Image:
     """Singleton to access images"""
 
     _cache: MutableMapping[str, Sequence[Path]] = {}
-
-    @classmethod
-    def get_images_from(cls, topic: str) -> Sequence:
-        """Returns a random image from the directory"""
-        images = cls.get_image_list_from(topic)
-        return images
 
     @classmethod
     def get_image_list_from(cls, topic: str) -> Sequence[Path]:
